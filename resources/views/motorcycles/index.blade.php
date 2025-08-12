@@ -179,7 +179,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                            @if($motorcycle->status == '可出租')
+                            @if($motorcycle->status == 'available')
                                 <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-success">
                                     <i class="bi bi-cart-plus"></i> 我要預約
                                 </a>
