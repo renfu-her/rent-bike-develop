@@ -14,12 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'admin',
+        // 建立管理員帳號（如果不存在）
+        User::firstOrCreate([
             'email' => 'admin@admin.com',
+        ], [
+            'name' => 'admin',
             'password' => Hash::make('admin1234'),
+        ]);
+
+        // 執行機車出租相關的 seeder
+        $this->call([
+            MotorcycleRentalSeeder::class,
         ]);
     }
 }

@@ -12,14 +12,7 @@
         </div>
     </div>
 
-    <!-- Debug Section -->
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="alert alert-info">
-                <strong>Debug Info:</strong> 商店數量: {{ $storesCount ?? 'N/A' }}
-            </div>
-        </div>
-    </div>
+
 
     <!-- Search and Filter Section -->
     <div class="row mb-4">
@@ -47,8 +40,6 @@
                                         <option value="" disabled>沒有可用的商店</option>
                                     @endif
                                 </select>
-                                <!-- Debug info -->
-                                <small class="text-muted">商店數量: {{ $stores->count() }}</small>
                             </div>
                             <div class="col-md-3">
                                 <label for="status" class="form-label">狀態</label>

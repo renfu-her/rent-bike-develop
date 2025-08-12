@@ -35,11 +35,8 @@ class MotorcycleController extends Controller
 
         // Get stores for the dropdown
         $stores = Store::where('status', '啟用')->get();
-        
-        // Debug: Add stores count to the view
-        $storesCount = $stores->count();
 
-        return view('motorcycles.index', compact('motorcycles', 'stores', 'storesCount'));
+        return view('motorcycles.index', compact('motorcycles', 'stores'));
     }
 
     public function rent($id)
