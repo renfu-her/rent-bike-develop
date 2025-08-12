@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorcycleController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\Auth\MemberAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,13 @@ use App\Http\Controllers\StoreController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Member Authentication Routes
+Route::get('/login', [MemberAuthController::class, 'showLoginForm'])->name('member.login');
+Route::post('/login', [MemberAuthController::class, 'login']);
+Route::get('/register', [MemberAuthController::class, 'showRegistrationForm'])->name('member.register');
+Route::post('/register', [MemberAuthController::class, 'register']);
+Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
 
 // Motorcycle routes
 Route::get('/motorcycles', [MotorcycleController::class, 'index'])->name('motorcycles.index');

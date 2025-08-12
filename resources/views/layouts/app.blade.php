@@ -41,6 +41,31 @@
                 </ul>
                 
                 <ul class="navbar-nav">
+                    @auth('member')
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i> {{ Auth::guard('member')->user()->name }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('profile') }}">個人資料</a></li>
+                                <li><a class="dropdown-item" href="{{ route('orders.index') }}">我的訂單</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('member.logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">登出</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('member.login') }}">登入</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('member.register') }}">註冊</a>
+                        </li>
+                    @endauth
                     <li class="nav-item">
                         <a class="nav-link" href="/admin" target="_blank">
                             <i class="bi bi-gear"></i> 後台管理

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use App\Models\MotorcycleAccessory;
 use App\Models\Store;
 use App\Models\Member;
@@ -61,18 +62,24 @@ class MotorcycleRentalSeeder extends Seeder
         $members = [
             [
                 'name' => '張小明',
+                'email' => 'zhang@example.com',
+                'password' => Hash::make('password123'),
                 'id_number' => 'A123456789',
                 'phone' => '0912-345-678',
                 'address' => '台北市大安區復興南路一段390號'
             ],
             [
                 'name' => '李小華',
+                'email' => 'li@example.com',
+                'password' => Hash::make('password123'),
                 'id_number' => 'B987654321',
                 'phone' => '0923-456-789',
                 'address' => '台北市信義區信義路五段7號'
             ],
             [
                 'name' => '王小美',
+                'email' => 'wang@example.com',
+                'password' => Hash::make('password123'),
                 'id_number' => 'C111222333',
                 'phone' => '0934-567-890',
                 'address' => '台北市中山區中山北路二段1號'
