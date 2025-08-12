@@ -33,14 +33,20 @@ class MotorcycleController extends Controller
 
         $motorcycles = $query->paginate(12);
 
-        return view('motorcycles.index', compact('motorcycles'));
+        // Get stores for the dropdown
+        $stores = Store::where('status', '啟用')->get();
+        
+        // Debug: Add stores count to the view
+        $storesCount = $stores->count();
+
+        return view('motorcycles.index', compact('motorcycles', 'stores', 'storesCount'));
     }
 
     public function rent($id)
     {
         $motorcycle = Motorcycle::with('store')->findOrFail($id);
         
-                       if ($motorcycle->status !== '可出租') {
+                       if ($motorcycle->status !== 'available') {
             return redirect()->route('motorcycles.index')
                 ->with('error', '此機車目前無法預約');
         }

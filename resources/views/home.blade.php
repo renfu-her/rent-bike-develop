@@ -86,7 +86,7 @@
         </div>
         
         <div class="col-md-3 text-center mb-3">
-                               <div class="h2 text-primary fw-bold">{{ \App\Models\Motorcycle::where('status', '可出租')->count() }}</div>
+                               <div class="h2 text-primary fw-bold">{{ \App\Models\Motorcycle::where('status', 'available')->count() }}</div>
             <p class="text-muted">可出租機車</p>
         </div>
         

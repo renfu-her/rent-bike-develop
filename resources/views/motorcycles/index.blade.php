@@ -12,6 +12,15 @@
         </div>
     </div>
 
+    <!-- Debug Section -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <strong>Debug Info:</strong> 商店數量: {{ $storesCount ?? 'N/A' }}
+            </div>
+        </div>
+    </div>
+
     <!-- Search and Filter Section -->
     <div class="row mb-4">
         <div class="col-12">
@@ -28,12 +37,18 @@
                                 <label for="store" class="form-label">商店</label>
                                 <select class="form-select" id="store" name="store">
                                     <option value="">所有商店</option>
-                                    @foreach(\App\Models\Store::where('status', 'active')->get() as $store)
-                                        <option value="{{ $store->id }}" {{ request('store') == $store->id ? 'selected' : '' }}>
-                                            {{ $store->name }}
-                                        </option>
-                                    @endforeach
+                                    @if($stores->count() > 0)
+                                        @foreach($stores as $store)
+                                            <option value="{{ $store->id }}" {{ request('store') == $store->id ? 'selected' : '' }}>
+                                                {{ $store->name }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="" disabled>沒有可用的商店</option>
+                                    @endif
                                 </select>
+                                <!-- Debug info -->
+                                <small class="text-muted">商店數量: {{ $stores->count() }}</small>
                             </div>
                             <div class="col-md-3">
                                 <label for="status" class="form-label">狀態</label>
@@ -173,11 +188,11 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                                                               @if($motorcycle->status == '可出租')
-                                       <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-primary">
-                                           <i class="bi bi-cart-plus"></i> 立即預約
-                                       </a>
-                                   @endif
+                            @if($motorcycle->status == 'available')
+                                <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-primary">
+                                    <i class="bi bi-cart-plus"></i> 立即預約
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

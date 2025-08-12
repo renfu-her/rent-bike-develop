@@ -9,7 +9,7 @@ class StoreController extends Controller
 {
     public function index()
     {
-        $stores = Store::where('status', 'active')->paginate(12);
+        $stores = Store::where('status', '啟用')->paginate(12);
         return view('stores.index', compact('stores'));
     }
 

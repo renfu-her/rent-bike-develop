@@ -25,7 +25,9 @@
                             <p class="text-muted mb-3">
                                 <i class="bi bi-telephone"></i> {{ $store->phone }}
                             </p>
-                            <span class="badge bg-success">營業中</span>
+                            <span class="badge bg-{{ $store->status == '啟用' ? 'success' : 'danger' }}">
+                                {{ $store->status == '啟用' ? '營業中' : '停業中' }}
+                            </span>
                         </div>
                         <div class="col-md-4 text-md-end">
                             <a href="{{ route('motorcycles.index') }}?store={{ $store->id }}" class="btn btn-primary">
@@ -52,7 +54,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <h5 class="card-title mb-0">{{ $motorcycle->name }}</h5>
-                                                         <span class="badge bg-{{ $motorcycle->status == '可出租' ? 'success' : ($motorcycle->status == '已出租' ? 'warning' : 'danger') }}">
+                                                         <span class="badge bg-{{ $motorcycle->status == 'available' ? 'success' : ($motorcycle->status == 'rented' ? 'warning' : 'danger') }}">
                                 {{ $motorcycle->status_text }}
                             </span>
                         </div>
@@ -86,7 +88,7 @@
                                 NT$ {{ number_format($motorcycle->price) }}
                             </div>
                             <div class="btn-group">
-                                                                 @if($motorcycle->status == '可出租')
+                                                                 @if($motorcycle->status == 'available')
                                     <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-primary btn-sm">
                                         <i class="bi bi-cart-plus"></i> 預約
                                     </a>
