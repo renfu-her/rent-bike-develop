@@ -30,6 +30,7 @@ Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.lo
 // Motorcycle routes
 Route::get('/motorcycles', [MotorcycleController::class, 'index'])->name('motorcycles.index');
 Route::get('/motorcycles/{id}/rent', [MotorcycleController::class, 'rent'])->name('motorcycles.rent');
+Route::post('/motorcycles/{id}/rent', [MotorcycleController::class, 'storeRent'])->name('motorcycles.rent.store')->middleware('auth:member');
 
 // Store routes
 Route::get('/stores', [StoreController::class, 'index'])->name('stores.index');

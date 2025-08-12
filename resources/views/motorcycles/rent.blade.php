@@ -4,6 +4,18 @@
 
 @section('content')
 <div class="container">
+    @guest('member')
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="alert alert-warning text-center">
+                    <h4><i class="bi bi-exclamation-triangle"></i> 請先登入</h4>
+                    <p>您需要登入會員才能進行預約</p>
+                    <a href="{{ route('member.login') }}" class="btn btn-primary">立即登入</a>
+                    <a href="{{ route('member.register') }}" class="btn btn-outline-primary ms-2">註冊會員</a>
+                </div>
+            </div>
+        </div>
+    @else
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <!-- Breadcrumb -->
@@ -61,32 +73,33 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">預約資訊</h4>
-                    <form>
+                    <form method="POST" action="{{ route('motorcycles.rent.store', $motorcycle->id) }}">
+                        @csrf
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label">姓名 *</label>
-                                <input type="text" class="form-control" id="name" required>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ Auth::guard('member')->user()->name }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="phone" class="form-label">電話 *</label>
-                                <input type="tel" class="form-control" id="phone" required>
+                                <input type="tel" class="form-control" id="phone" name="phone" value="{{ Auth::guard('member')->user()->phone }}" readonly>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="id_number" class="form-label">身份證字號 *</label>
-                                <input type="text" class="form-control" id="id_number" required>
+                                <input type="text" class="form-control" id="id_number" name="id_number" value="{{ Auth::guard('member')->user()->id_number }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="license_number" class="form-label">駕照號碼 *</label>
-                                <input type="text" class="form-control" id="license_number" required>
+                                <input type="text" class="form-control" id="license_number" name="license_number" required>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="address" class="form-label">地址 *</label>
-                            <textarea class="form-control" id="address" rows="2" required></textarea>
+                            <textarea class="form-control" id="address" name="address" rows="2" readonly>{{ Auth::guard('member')->user()->address }}</textarea>
                         </div>
 
                         <div class="row">
@@ -172,6 +185,7 @@
             </div>
         </div>
     </div>
+    @endguest
 </div>
 @endsection
 
