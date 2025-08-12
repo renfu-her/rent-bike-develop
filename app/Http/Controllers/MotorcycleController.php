@@ -15,9 +15,9 @@ class MotorcycleController extends Controller
         // Search by name or model
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%");
+                    ->orWhere('model', 'like', "%{$search}%");
             });
         }
 
@@ -42,8 +42,8 @@ class MotorcycleController extends Controller
     public function rent($id)
     {
         $motorcycle = Motorcycle::with('store')->findOrFail($id);
-        
-                       if ($motorcycle->status !== 'available') {
+
+        if ($motorcycle->status !== 'available') {
             return redirect()->route('motorcycles.index')
                 ->with('error', '此機車目前無法預約');
         }
