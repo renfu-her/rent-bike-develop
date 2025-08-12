@@ -73,7 +73,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <h5 class="card-title mb-0">{{ $motorcycle->name }}</h5>
-                                                               <span class="badge bg-{{ $motorcycle->status == 'available' ? 'primary' : ($motorcycle->status == 'rented' ? 'warning' : 'danger') }}">
+                                                               <span class="badge bg-{{ $motorcycle->status == '可出租' ? 'primary' : ($motorcycle->status == '已出租' ? 'warning' : 'danger') }}">
                                 {{ $motorcycle->status_text }}
                             </span>
                         </div>
@@ -115,7 +115,7 @@
                                            data-bs-toggle="modal" data-bs-target="#motorcycleModal{{ $motorcycle->id }}">
                                        <i class="bi bi-eye"></i> 詳細
                                    </button>
-                                   @if($motorcycle->status == 'available')
+                                   @if($motorcycle->status == '可出租')
                                        <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-success btn-sm">
                                            <i class="bi bi-cart-plus"></i> 我要預約
                                        </a>
@@ -147,7 +147,7 @@
                                         <li><strong>車牌：</strong>{{ $motorcycle->license_plate }}</li>
                                         <li><strong>商店：</strong>{{ $motorcycle->store->name }}</li>
                                         <li><strong>狀態：</strong>
-                                            <span class="badge bg-{{ $motorcycle->status == 'available' ? 'primary' : ($motorcycle->status == 'rented' ? 'warning' : 'danger') }}">
+                                            <span class="badge bg-{{ $motorcycle->status == '可出租' ? 'primary' : ($motorcycle->status == '已出租' ? 'warning' : 'danger') }}">
                                                 {{ $motorcycle->status_text }}
                                             </span>
                                         </li>
@@ -179,7 +179,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                            @if($motorcycle->status == 'available')
+                            @if($motorcycle->status == '可出租')
                                 <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-success">
                                     <i class="bi bi-cart-plus"></i> 我要預約
                                 </a>
