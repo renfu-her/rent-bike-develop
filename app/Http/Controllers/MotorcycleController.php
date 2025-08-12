@@ -56,7 +56,7 @@ class MotorcycleController extends Controller
     public function storeRent(Request $request, $id)
     {
         $motorcycle = Motorcycle::findOrFail($id);
-        
+ 
         // 檢查機車是否仍可預約
         if ($motorcycle->status !== 'available') {
             return redirect()->route('motorcycles.index')
@@ -77,7 +77,9 @@ class MotorcycleController extends Controller
             'member_id' => auth('member')->id(),
             'total_price' => $motorcycle->price * (strtotime($request->return_date) - strtotime($request->rent_date)) / (24 * 60 * 60),
             'rent_date' => $request->rent_date,
+            'return_date' => $request->return_date,
             'is_completed' => false,
+            'order_no' => Order::generateOrderNo(),
         ]);
 
         // 建立訂單明細
@@ -93,6 +95,6 @@ class MotorcycleController extends Controller
         $motorcycle->update(['status' => 'rented']);
 
         return redirect()->route('orders.index')
-            ->with('success', '預約成功！您的訂單編號是：' . $order->id);
+            ->with('success', '預約成功！您的訂單編號是：' . $order->order_no);
     }
 }

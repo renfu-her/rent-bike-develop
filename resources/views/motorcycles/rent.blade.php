@@ -105,17 +105,17 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="rent_date" class="form-label">租車日期 *</label>
-                                <input type="date" class="form-control" id="rent_date" required>
+                                <input type="date" class="form-control" id="rent_date" name="rent_date" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="return_date" class="form-label">還車日期 *</label>
-                                <input type="date" class="form-control" id="return_date" required>
+                                <input type="date" class="form-control" id="return_date" name="return_date" required>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="notes" class="form-label">備註</label>
-                            <textarea class="form-control" id="notes" rows="3" placeholder="如有特殊需求請在此說明"></textarea>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="如有特殊需求請在此說明"></textarea>
                         </div>
 
                         <hr>
