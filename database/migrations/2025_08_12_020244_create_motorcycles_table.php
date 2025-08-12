@@ -19,7 +19,7 @@ return new class extends Migration
             $table->json('accessories')->nullable()->comment('機車配件 (JSON array)');
             $table->string('license_plate')->unique()->comment('車牌');
             $table->decimal('price', 10, 2)->comment('價格');
-            $table->enum('status', ['available', 'rented', 'maintenance'])->default('available')->comment('狀態');
+            $table->string('status', 10)->default('可出租')->comment('狀態');
             $table->timestamps();
         });
     }

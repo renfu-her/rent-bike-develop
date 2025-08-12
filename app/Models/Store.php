@@ -32,9 +32,6 @@ class Store extends Model
 
     public function getStatusTextAttribute()
     {
-        return [
-            'active' => '啟用',
-            'inactive' => '停用',
-        ][$this->status] ?? $this->status;
+        return $this->status;
     }
 }

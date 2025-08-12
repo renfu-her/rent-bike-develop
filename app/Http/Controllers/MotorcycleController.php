@@ -40,7 +40,7 @@ class MotorcycleController extends Controller
     {
         $motorcycle = Motorcycle::with('store')->findOrFail($id);
         
-        if ($motorcycle->status !== 'available') {
+                       if ($motorcycle->status !== '可出租') {
             return redirect()->route('motorcycles.index')
                 ->with('error', '此機車目前無法預約');
         }

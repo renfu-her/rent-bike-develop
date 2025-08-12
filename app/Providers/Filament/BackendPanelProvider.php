@@ -38,8 +38,10 @@ class BackendPanelProvider extends PanelProvider
             ->darkMode(false)
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                \App\Filament\Widgets\DashboardStats::class,
+                \App\Filament\Widgets\AvailableMotorcyclesTable::class,
+                \App\Filament\Widgets\RentedMotorcyclesTable::class,
+                \App\Filament\Widgets\ReservationTable::class,
             ])
             ->middleware([
                 EncryptCookies::class,

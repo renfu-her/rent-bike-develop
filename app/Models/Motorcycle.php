@@ -36,10 +36,6 @@ class Motorcycle extends Model
 
     public function getStatusTextAttribute()
     {
-        return [
-            'available' => '可出租',
-            'rented' => '已出租',
-            'maintenance' => '維修中',
-        ][$this->status] ?? $this->status;
+        return $this->status;
     }
 }

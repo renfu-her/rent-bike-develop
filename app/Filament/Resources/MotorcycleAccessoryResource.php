@@ -21,7 +21,7 @@ class MotorcycleAccessoryResource extends Resource
     protected static ?string $navigationLabel = '機車配件管理';
     protected static ?string $modelLabel = '機車配件';
     protected static ?string $pluralModelLabel = '機車配件';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-cog';
 
     public static function form(Form $form): Form

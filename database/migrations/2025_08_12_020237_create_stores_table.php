@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->comment('商店名稱');
             $table->string('phone')->comment('電話');
             $table->text('address')->comment('地址');
-            $table->enum('status', ['active', 'inactive'])->default('active')->comment('狀態');
+            $table->string('status', 10)->default('啟用')->comment('狀態');
             $table->timestamps();
         });
     }

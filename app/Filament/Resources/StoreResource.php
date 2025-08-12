@@ -45,10 +45,10 @@ class StoreResource extends Resource
                 Forms\Components\Select::make('status')
                     ->label('狀態')
                     ->options([
-                        'active' => '啟用',
-                        'inactive' => '停用',
+                        '啟用' => '啟用',
+                        '停用' => '停用',
                     ])
-                    ->default('active')
+                    ->default('啟用')
                     ->required(),
             ]);
     }
@@ -72,8 +72,8 @@ class StoreResource extends Resource
                     ->label('狀態')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'active' => 'success',
-                        'inactive' => 'danger',
+                        '啟用' => 'success',
+                        '停用' => 'danger',
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -91,8 +91,8 @@ class StoreResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('狀態篩選')
                     ->options([
-                        'active' => '啟用',
-                        'inactive' => '停用',
+                        '啟用' => '啟用',
+                        '停用' => '停用',
                     ]),
             ])
             ->actions([
@@ -109,7 +109,7 @@ class StoreResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\MotorcyclesRelationManager::class,
         ];
     }
 

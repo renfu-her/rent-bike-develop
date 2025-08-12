@@ -86,12 +86,12 @@
         </div>
         
         <div class="col-md-3 text-center mb-3">
-            <div class="h2 text-primary fw-bold">{{ \App\Models\Motorcycle::where('status', 'available')->count() }}</div>
+                               <div class="h2 text-primary fw-bold">{{ \App\Models\Motorcycle::where('status', '可出租')->count() }}</div>
             <p class="text-muted">可出租機車</p>
         </div>
         
         <div class="col-md-3 text-center mb-3">
-            <div class="h2 text-success fw-bold">{{ \App\Models\Store::where('status', 'active')->count() }}</div>
+                               <div class="h2 text-success fw-bold">{{ \App\Models\Store::where('status', '啟用')->count() }}</div>
             <p class="text-muted">服務據點</p>
         </div>
         

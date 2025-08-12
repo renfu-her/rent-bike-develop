@@ -34,24 +34,24 @@ class MotorcycleRentalSeeder extends Seeder
 
         // Create Stores
         $stores = [
-            [
-                'name' => '台北車站店',
-                'phone' => '02-1234-5678',
-                'address' => '台北市中正區忠孝西路一段49號',
-                'status' => 'active'
-            ],
-            [
-                'name' => '西門町店',
-                'phone' => '02-2345-6789',
-                'address' => '台北市萬華區西寧南路50號',
-                'status' => 'active'
-            ],
-            [
-                'name' => '信義店',
-                'phone' => '02-3456-7890',
-                'address' => '台北市信義區松仁路100號',
-                'status' => 'active'
-            ],
+                               [
+                       'name' => '台北車站店',
+                       'phone' => '02-1234-5678',
+                       'address' => '台北市中正區忠孝西路一段49號',
+                       'status' => '啟用'
+                   ],
+                   [
+                       'name' => '西門町店',
+                       'phone' => '02-2345-6789',
+                       'address' => '台北市萬華區西寧南路50號',
+                       'status' => '啟用'
+                   ],
+                   [
+                       'name' => '信義店',
+                       'phone' => '02-3456-7890',
+                       'address' => '台北市信義區松仁路100號',
+                       'status' => '啟用'
+                   ],
         ];
 
         foreach ($stores as $store) {
@@ -92,60 +92,60 @@ class MotorcycleRentalSeeder extends Seeder
 
         // Create Motorcycles
         $motorcycles = [
-            [
-                'store_id' => 1,
-                'name' => 'YAMAHA 勁戰',
-                'model' => 'CYGNUS-X 125',
-                'accessories' => [1, 2, 3], // 安全帽, 雨衣, GPS導航
-                'license_plate' => 'ABC-123',
-                'price' => 800,
-                'status' => 'available'
-            ],
-            [
-                'store_id' => 1,
-                'name' => 'SYM 新名流',
-                'model' => 'NEW DINK 125',
-                'accessories' => [1, 2, 4], // 安全帽, 雨衣, 手機架
-                'license_plate' => 'DEF-456',
-                'price' => 750,
-                'status' => 'available'
-            ],
-            [
-                'store_id' => 2,
-                'name' => 'KYMCO 雷霆',
-                'model' => 'RACING 150',
-                'accessories' => [1, 2, 5], // 安全帽, 雨衣, 後箱
-                'license_plate' => 'GHI-789',
-                'price' => 900,
-                'status' => 'rented'
-            ],
-            [
-                'store_id' => 2,
-                'name' => 'HONDA 新大眼',
-                'model' => 'CB150R',
-                'accessories' => [1, 3, 4], // 安全帽, GPS導航, 手機架
-                'license_plate' => 'JKL-012',
-                'price' => 1000,
-                'status' => 'available'
-            ],
-            [
-                'store_id' => 3,
-                'name' => 'SUZUKI 小阿魯',
-                'model' => 'GSX-R150',
-                'accessories' => [1, 2, 3, 4], // 安全帽, 雨衣, GPS導航, 手機架
-                'license_plate' => 'MNO-345',
-                'price' => 1200,
-                'status' => 'maintenance'
-            ],
-            [
-                'store_id' => 3,
-                'name' => 'PGO 彪虎',
-                'model' => 'TIGRA 150',
-                'accessories' => [1, 2, 5], // 安全帽, 雨衣, 後箱
-                'license_plate' => 'PQR-678',
-                'price' => 850,
-                'status' => 'available'
-            ],
+                               [
+                       'store_id' => 1,
+                       'name' => 'YAMAHA 勁戰',
+                       'model' => 'CYGNUS-X 125',
+                       'accessories' => [1, 2, 3], // 安全帽, 雨衣, GPS導航
+                       'license_plate' => 'ABC-123',
+                       'price' => 800,
+                       'status' => '可出租'
+                   ],
+                   [
+                       'store_id' => 1,
+                       'name' => 'SYM 新名流',
+                       'model' => 'NEW DINK 125',
+                       'accessories' => [1, 2, 4], // 安全帽, 雨衣, 手機架
+                       'license_plate' => 'DEF-456',
+                       'price' => 750,
+                       'status' => '可出租'
+                   ],
+                   [
+                       'store_id' => 2,
+                       'name' => 'KYMCO 雷霆',
+                       'model' => 'RACING 150',
+                       'accessories' => [1, 2, 5], // 安全帽, 雨衣, 後箱
+                       'license_plate' => 'GHI-789',
+                       'price' => 900,
+                       'status' => '已出租'
+                   ],
+                   [
+                       'store_id' => 2,
+                       'name' => 'HONDA 新大眼',
+                       'model' => 'CB150R',
+                       'accessories' => [1, 3, 4], // 安全帽, GPS導航, 手機架
+                       'license_plate' => 'JKL-012',
+                       'price' => 1000,
+                       'status' => '可出租'
+                   ],
+                   [
+                       'store_id' => 3,
+                       'name' => 'SUZUKI 小阿魯',
+                       'model' => 'GSX-R150',
+                       'accessories' => [1, 2, 3, 4], // 安全帽, 雨衣, GPS導航, 手機架
+                       'license_plate' => 'MNO-345',
+                       'price' => 1200,
+                       'status' => '維修中'
+                   ],
+                   [
+                       'store_id' => 3,
+                       'name' => 'PGO 彪虎',
+                       'model' => 'TIGRA 150',
+                       'accessories' => [1, 2, 5], // 安全帽, 雨衣, 後箱
+                       'license_plate' => 'PQR-678',
+                       'price' => 850,
+                       'status' => '可出租'
+                   ],
         ];
 
         foreach ($motorcycles as $motorcycle) {

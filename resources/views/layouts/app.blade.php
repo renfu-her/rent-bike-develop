@@ -67,7 +67,7 @@
                         </li>
                     @endauth
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin" target="_blank">
+                        <a class="nav-link" href="/backend" target="_blank">
                             <i class="bi bi-gear"></i> 後台管理
                         </a>
                     </li>
