@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorcycleController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\Auth\MemberAuthController;
+use App\Http\Controllers\MemberProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +42,9 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-// Profile page (placeholder)
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
+// Profile routes
+Route::get('/profile', [MemberProfileController::class, 'show'])->name('profile.show')->middleware('auth:member');
+Route::put('/profile', [MemberProfileController::class, 'update'])->name('profile.update')->middleware('auth:member');
 
 // Orders page (placeholder)
 Route::get('/orders', function () {

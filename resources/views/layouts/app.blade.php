@@ -47,7 +47,7 @@
                                 <i class="bi bi-person-circle"></i> {{ Auth::guard('member')->user()->name }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('profile') }}">個人資料</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.show') }}">個人資料</a></li>
                                 <li><a class="dropdown-item" href="{{ route('orders.index') }}">我的訂單</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
