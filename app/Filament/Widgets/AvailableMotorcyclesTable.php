@@ -27,7 +27,7 @@ class AvailableMotorcyclesTable extends BaseWidget
                     'status',
                     'store_id'
                 ])
-                ->where('status', '可出租')
+                ->where('status', 'available')
                 ->with(['store:id,name,phone,address'])
             )
             ->columns([
@@ -63,7 +63,7 @@ class AvailableMotorcyclesTable extends BaseWidget
             'status',
             'store_id'
         ])
-        ->where('status', '可出租')
+        ->where('status', 'available')
         ->with(['store:id,name,phone,address']);
     }
 }

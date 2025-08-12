@@ -35,7 +35,7 @@ class RentedMotorcyclesTable extends BaseWidget
                     ->leftJoin('order_details', 'motorcycles.id', '=', 'order_details.motorcycle_id')
                     ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
                     ->leftJoin('members', 'orders.member_id', '=', 'members.id')
-                    ->where('motorcycles.status', '已出租')
+                    ->where('motorcycles.status', 'rented')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('member_name')
@@ -89,6 +89,6 @@ class RentedMotorcyclesTable extends BaseWidget
             ->leftJoin('order_details', 'motorcycles.id', '=', 'order_details.motorcycle_id')
             ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
             ->leftJoin('members', 'orders.member_id', '=', 'members.id')
-            ->where('motorcycles.status', '已出租');
+            ->where('motorcycles.status', 'rented');
     }
 }

@@ -67,7 +67,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <h5 class="card-title mb-0">{{ $motorcycle->name }}</h5>
-                                                               <span class="badge bg-{{ $motorcycle->status == '可出租' ? 'success' : ($motorcycle->status == '已出租' ? 'warning' : 'danger') }}">
+                                                               <span class="badge bg-{{ $motorcycle->status == 'available' ? 'success' : ($motorcycle->status == 'rented' ? 'warning' : 'danger') }}">
                                 {{ $motorcycle->status_text }}
                             </span>
                         </div>
@@ -109,7 +109,7 @@
                                            data-bs-toggle="modal" data-bs-target="#motorcycleModal{{ $motorcycle->id }}">
                                        <i class="bi bi-eye"></i> 詳細
                                    </button>
-                                   @if($motorcycle->status == '可出租')
+                                   @if($motorcycle->status == 'available')
                                        <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-primary btn-sm">
                                            <i class="bi bi-cart-plus"></i> 預約
                                        </a>
@@ -141,7 +141,7 @@
                                         <li><strong>車牌：</strong>{{ $motorcycle->license_plate }}</li>
                                         <li><strong>商店：</strong>{{ $motorcycle->store->name }}</li>
                                         <li><strong>狀態：</strong>
-                                            <span class="badge bg-{{ $motorcycle->status == '可出租' ? 'success' : ($motorcycle->status == '已出租' ? 'warning' : 'danger') }}">
+                                            <span class="badge bg-{{ $motorcycle->status == 'available' ? 'success' : ($motorcycle->status == 'rented' ? 'warning' : 'danger') }}">
                                                 {{ $motorcycle->status_text }}
                                             </span>
                                         </li>

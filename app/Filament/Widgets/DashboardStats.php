@@ -14,10 +14,10 @@ class DashboardStats extends BaseWidget
         $today = now()->toDateString();
         
         // 待出租車數量
-        $availableMotorcyclesCount = Motorcycle::where('status', '可出租')->count();
+        $availableMotorcyclesCount = Motorcycle::where('status', 'available')->count();
         
         // 今日待還車數量
-        $rentedMotorcyclesCount = Motorcycle::where('status', '已出租')->count();
+        $rentedMotorcyclesCount = Motorcycle::where('status', 'rented')->count();
         
         // 預約車子數量
         $reservedOrdersCount = Order::where('rent_date', '>', $today)->count();

@@ -60,11 +60,11 @@ class MotorcycleResource extends Resource
                 Forms\Components\Select::make('status')
                     ->label('狀態')
                     ->options([
-                        '可出租' => '可出租',
-                        '已出租' => '已出租',
-                        '維修中' => '維修中',
+                        'available' => '可出租',
+                        'rented' => '已出租',
+                        'maintenance' => '維修中',
                     ])
-                    ->default('可出租')
+                    ->default('available')
                     ->required(),
             ]);
     }
@@ -97,9 +97,14 @@ class MotorcycleResource extends Resource
                     ->label('狀態')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        '可出租' => 'success',
-                        '已出租' => 'warning',
-                        '維修中' => 'danger',
+                        'available' => 'success',
+                        'rented' => 'warning',
+                        'maintenance' => 'danger',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'available' => '可出租',
+                        'rented' => '已出租',
+                        'maintenance' => '維修中',
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -120,9 +125,9 @@ class MotorcycleResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('狀態篩選')
                     ->options([
-                        '可出租' => '可出租',
-                        '已出租' => '已出租',
-                        '維修中' => '維修中',
+                        'available' => '可出租',
+                        'rented' => '已出租',
+                        'maintenance' => '維修中',
                     ]),
             ])
             ->actions([
