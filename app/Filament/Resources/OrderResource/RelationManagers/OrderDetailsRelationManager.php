@@ -1,39 +1,28 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\OrderResource\RelationManagers;
 
-use App\Filament\Resources\OrderDetailResource\Pages;
-use App\Filament\Resources\OrderDetailResource\RelationManagers;
-use App\Models\OrderDetail;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class OrderDetailResource extends Resource
+class OrderDetailsRelationManager extends RelationManager
 {
-    protected static ?string $model = OrderDetail::class;
-
-    protected static ?string $navigationGroup = '訂單管理';
-    protected static ?string $navigationLabel = '訂單明細';
-    protected static ?string $modelLabel = '訂單明細';
+    protected static string $relationship = 'orderDetails';
+    protected static ?string $title = '訂單明細';
     protected static ?string $pluralModelLabel = '訂單明細';
-    protected static ?int $navigationSort = 2;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $pluralLabel = '訂單明細';
+    protected static ?string $modelLabel = '訂單明細';
+    protected static ?string $label = '訂單明細';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('order_id')
-                    ->label('訂單')
-                    ->relationship('order', 'order_no')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
                 Forms\Components\Select::make('motorcycle_id')
                     ->label('機車')
                     ->relationship('motorcycle', 'name')
@@ -61,16 +50,11 @@ class OrderDetailResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('id')
             ->columns([
-                Tables\Columns\TextColumn::make('order.order_no')
-                    ->label('訂單編號')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable()
-                    ->copyMessage('訂單編號已複製'),
                 Tables\Columns\TextColumn::make('motorcycle.name')
                     ->label('機車名稱')
                     ->searchable()
@@ -100,43 +84,21 @@ class OrderDetailResource extends Resource
                     ->dateTime('Y-m-d H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('更新時間')
-                    ->dateTime('Y-m-d H:i:s')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('order_id')
-                    ->label('訂單篩選')
-                    ->relationship('order', 'order_no'),
-                Tables\Filters\SelectFilter::make('motorcycle_id')
-                    ->label('機車篩選')
-                    ->relationship('motorcycle', 'name'),
+                //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListOrderDetails::route('/'),
-            'create' => Pages\CreateOrderDetail::route('/create'),
-            'edit' => Pages\EditOrderDetail::route('/{record}/edit'),
-        ];
     }
 }

@@ -28,6 +28,11 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('order_no')
+                    ->label('訂單編號')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(20),
                 Forms\Components\Select::make('store_id')
                     ->label('商店')
                     ->relationship('store', 'name')
@@ -50,6 +55,10 @@ class OrderResource extends Resource
                     ->label('租車日期')
                     ->required()
                     ->displayFormat('Y-m-d'),
+                Forms\Components\DatePicker::make('return_date')
+                    ->label('還車日期')
+                    ->required()
+                    ->displayFormat('Y-m-d'),
                 Forms\Components\Toggle::make('is_completed')
                     ->label('是否成交')
                     ->default(false),
@@ -60,6 +69,12 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('order_no')
+                    ->label('訂單編號')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable()
+                    ->copyMessage('訂單編號已複製'),
                 Tables\Columns\TextColumn::make('store.name')
                     ->label('商店')
                     ->searchable()
@@ -74,6 +89,10 @@ class OrderResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('rent_date')
                     ->label('租車日期')
+                    ->date('Y-m-d')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('return_date')
+                    ->label('還車日期')
                     ->date('Y-m-d')
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_completed')
@@ -115,7 +134,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\OrderDetailsRelationManager::class,
         ];
     }
 
