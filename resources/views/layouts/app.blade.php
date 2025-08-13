@@ -44,6 +44,7 @@
                 </ul>
                 
                 <ul class="navbar-nav">
+                    @if(Auth::guard('member')->check())
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('cart.index') }}">
                             <i class="bi bi-cart3"></i> 購物車
@@ -56,7 +57,8 @@
                             @endif
                         </a>
                     </li>
-                    @auth('member')
+                    @endif
+                    @if(Auth::guard('member')->check())
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle"></i> {{ Auth::guard('member')->user()->name }}
@@ -81,11 +83,11 @@
                             <a class="nav-link" href="{{ route('member.register') }}">註冊</a>
                         </li>
                     @endauth
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="/backend" target="_blank">
                             <i class="bi bi-gear"></i> 後台管理
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>
