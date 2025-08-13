@@ -63,6 +63,7 @@ class MotorcycleResource extends Resource
                         'available' => '可出租',
                         'rented' => '已出租',
                         'maintenance' => '維修中',
+                        'pending_checkout' => '待結帳',
                     ])
                     ->default('available')
                     ->required(),
@@ -100,11 +101,13 @@ class MotorcycleResource extends Resource
                         'available' => 'success',
                         'rented' => 'warning',
                         'maintenance' => 'danger',
+                        'pending_checkout' => 'info',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'available' => '可出租',
                         'rented' => '已出租',
                         'maintenance' => '維修中',
+                        'pending_checkout' => '待結帳',
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -128,6 +131,7 @@ class MotorcycleResource extends Resource
                         'available' => '可出租',
                         'rented' => '已出租',
                         'maintenance' => '維修中',
+                        'pending_checkout' => '待結帳',
                     ]),
             ])
             ->actions([

@@ -71,9 +71,9 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
                             <h5 class="card-title mb-0">{{ $motorcycle->name }}</h5>
-                                                               <span class="badge bg-{{ $motorcycle->status == 'available' ? 'primary' : ($motorcycle->status == 'rented' ? 'warning' : 'danger') }}">
+                            <span class="badge bg-{{ $motorcycle->status == 'available' ? 'primary' : ($motorcycle->status == 'rented' ? 'warning' : ($motorcycle->status == 'maintenance' ? 'danger' : 'info')) }}">
                                 {{ $motorcycle->status_text }}
                             </span>
                         </div>
@@ -115,16 +115,20 @@
                                            data-bs-toggle="modal" data-bs-target="#motorcycleModal{{ $motorcycle->id }}">
                                        <i class="bi bi-eye"></i> 詳細
                                    </button>
-                                   @if($motorcycle->status == 'available')
-                                       <button type="button" class="btn btn-success btn-sm" 
-                                               data-bs-toggle="modal" data-bs-target="#addToCartModal{{ $motorcycle->id }}">
-                                           <i class="bi bi-cart-plus"></i> 加入購物車
-                                       </button>
-                                   @else
-                                       <button class="btn btn-secondary btn-sm" disabled>
-                                           <i class="bi bi-x-circle"></i> 無法預約
-                                       </button>
-                                   @endif
+                                                                       @if($motorcycle->status == 'available')
+                                        <button type="button" class="btn btn-success btn-sm" 
+                                                data-bs-toggle="modal" data-bs-target="#addToCartModal{{ $motorcycle->id }}">
+                                            <i class="bi bi-cart-plus"></i> 加入購物車
+                                        </button>
+                                    @elseif($motorcycle->status == 'pending_checkout')
+                                        <button class="btn btn-info btn-sm" disabled>
+                                            <i class="bi bi-clock"></i> 待結帳
+                                        </button>
+                                    @else
+                                        <button class="btn btn-secondary btn-sm" disabled>
+                                            <i class="bi bi-x-circle"></i> 無法預約
+                                        </button>
+                                    @endif
                                </div>
                         </div>
                     </div>
@@ -148,7 +152,7 @@
                                         <li><strong>車牌：</strong>{{ $motorcycle->license_plate }}</li>
                                         <li><strong>商店：</strong>{{ $motorcycle->store->name }}</li>
                                         <li><strong>狀態：</strong>
-                                            <span class="badge bg-{{ $motorcycle->status == 'available' ? 'primary' : ($motorcycle->status == 'rented' ? 'warning' : 'danger') }}">
+                                            <span class="badge bg-{{ $motorcycle->status == 'available' ? 'primary' : ($motorcycle->status == 'rented' ? 'warning' : ($motorcycle->status == 'maintenance' ? 'danger' : 'info')) }}">
                                                 {{ $motorcycle->status_text }}
                                             </span>
                                         </li>

@@ -42,11 +42,13 @@ Route::put('/cart/update/{cartDetailId}', [CartController::class, 'update'])->na
 Route::delete('/cart/remove/{cartDetailId}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::post('/cart/process-checkout', [CartController::class, 'processCheckout'])->name('cart.processCheckout')->middleware('auth:member');
 
 // Payment routes
 Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process')->middleware('auth:member');
 Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
 Route::get('/payment/result', [PaymentController::class, 'result'])->name('payment.result');
+Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 
 // Store routes
 Route::get('/stores', [StoreController::class, 'index'])->name('stores.index');

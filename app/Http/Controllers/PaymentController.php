@@ -2,100 +2,114 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Motorcycle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use App\Models\Order;
+use App\Models\Cart;
 
 class PaymentController extends Controller
 {
     /**
-     * 處理結帳並導向綠界金流
+     * 處理付款請求
      */
     public function process(Request $request)
     {
-        $request->validate([
-            'cart_id' => 'required|exists:carts,id',
-            'payment_method' => 'required|in:credit_card,atm',
-            'invoice_type' => 'required|in:personal,company',
-        ]);
-
-        $cart = Cart::findOrFail($request->cart_id);
+        $cartId = $request->input('cart_id');
+        $paymentMethod = $request->input('payment_method', 'credit_card');
         
-        // 檢查購物車是否為當前用戶的
-        if ($cart->member_id !== auth('member')->id()) {
-            return back()->with('error', '無權限操作此購物車');
-        }
-
-        // 檢查購物車是否為空
-        if ($cart->isEmpty()) {
+        $cart = Cart::findOrFail($cartId);
+        $cartDetails = $cart->cartDetails()->with('motorcycle')->get();
+        
+        if ($cartDetails->isEmpty()) {
             return redirect()->route('cart.index')->with('error', '購物車是空的！');
         }
 
-        // 檢查機車是否仍可預約
-        $cartDetails = $cart->cartDetails()->with('motorcycle')->get();
-        foreach ($cartDetails as $detail) {
-            if ($detail->motorcycle->status !== 'available') {
-                return back()->with('error', '機車 ' . $detail->motorcycle->name . ' 目前無法預約');
-            }
-        }
-
         // 創建訂單
-        $order = Order::create([
-            'store_id' => $cartDetails->first()->motorcycle->store_id, // 使用第一個機車的商店
-            'member_id' => auth('member')->id(),
-            'total_price' => $cart->total_amount,
-            'rent_date' => $cartDetails->first()->rent_date, // 使用第一個項目的租車日期
-            'return_date' => $cartDetails->first()->return_date, // 使用第一個項目的還車日期
-            'is_completed' => false,
-            'order_no' => Order::generateOrderNo(),
-        ]);
+        $order = $this->createOrder($cart, $cartDetails);
+        
+        // 準備綠界金流參數
+        $paymentData = $this->prepareEcpayData($order, $paymentMethod);
+        
+        // 返回綠界付款表單
+        return view('payment.ecpay_form', $paymentData);
+    }
 
-        // 創建訂單明細並更新機車狀態
-        foreach ($cartDetails as $detail) {
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'motorcycle_id' => $detail->motorcycle_id,
-                'quantity' => $detail->quantity,
-                'subtotal' => $detail->subtotal,
-                'total' => $detail->subtotal,
+    /**
+     * 創建訂單
+     */
+    private function createOrder($cart, $cartDetails)
+    {
+        $member = auth('member')->user();
+        
+        // 開始資料庫交易
+        DB::beginTransaction();
+        
+        try {
+            // 檢查機車可用性並更新狀態
+            foreach ($cartDetails as $cartDetail) {
+                $motorcycle = $cartDetail->motorcycle;
+                
+                if ($motorcycle->status !== 'available') {
+                    throw new \Exception("機車 {$motorcycle->name} 目前無法預約");
+                }
+                
+                $motorcycle->update(['status' => 'pending_checkout']);
+            }
+
+            // 創建訂單
+            $order = Order::create([
+                'store_id' => $cartDetails->first()->motorcycle->store_id,
+                'member_id' => $member->id,
+                'total_price' => $cart->total_amount,
+                'rent_date' => $cartDetails->first()->rent_date,
+                'return_date' => $cartDetails->first()->return_date,
+                'is_completed' => false,
+                'order_no' => Order::generateOrderNo(),
             ]);
 
-            // 更新機車狀態為已出租
-            $detail->motorcycle->update(['status' => 'rented']);
+            // 創建訂單明細
+            foreach ($cartDetails as $cartDetail) {
+                \App\Models\OrderDetail::create([
+                    'order_id' => $order->id,
+                    'motorcycle_id' => $cartDetail->motorcycle_id,
+                    'quantity' => $cartDetail->quantity,
+                    'subtotal' => $cartDetail->subtotal,
+                    'total' => $cartDetail->subtotal,
+                ]);
+            }
+
+            // 清空購物車
+            $cart->clear();
+
+            DB::commit();
+            return $order;
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        // 清空購物車
-        $cart->clear();
-        $cart->update(['status' => 'completed']);
-
-        // 準備綠界金流參數
-        $ecpayParams = $this->prepareEcpayParams($order, $request->payment_method);
-
-        // 導向綠界金流
-        return view('payment.redirect', compact('ecpayParams'));
     }
 
     /**
      * 準備綠界金流參數
      */
-    private function prepareEcpayParams($order, $paymentMethod)
+    private function prepareEcpayData($order, $paymentMethod)
     {
-        $merchantId = config('services.ecpay.merchant_id', '2000132'); // 測試環境
-        $hashKey = config('services.ecpay.hash_key', '5294y06JbISpM5x9'); // 測試環境
-        $hashIV = config('services.ecpay.hash_iv', 'v77hoKGq4kWxNNIS'); // 測試環境
-        $paymentUrl = config('services.ecpay.payment_url', 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5');
+        // 綠界測試環境設定
+        $merchantId = '2000132'; // 測試特店編號
+        $hashKey = '5294y06JbISpM5x9'; // 測試 HashKey
+        $hashIV = 'v77hoKGq4kWxNNIS'; // 測試 HashIV
+        $paymentUrl = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
         // 商品名稱
-        $itemNames = [];
+        $itemName = '';
         foreach ($order->orderDetails as $detail) {
-            $itemNames[] = $detail->motorcycle->name;
+            $itemName .= $detail->motorcycle->name . '#' . $detail->motorcycle->model . '#';
         }
-        $itemName = implode('#', $itemNames);
+        $itemName = rtrim($itemName, '#');
 
-        // 基本參數
+        // 準備參數
         $params = [
             'MerchantID' => $merchantId,
             'MerchantTradeNo' => $order->order_no,
@@ -158,8 +172,8 @@ class PaymentController extends Controller
 
         // 驗證檢查碼
         $checkMacValue = $request->input('CheckMacValue');
-        $hashKey = config('services.ecpay.hash_key', '5294y06JbISpM5x9');
-        $hashIV = config('services.ecpay.hash_iv', 'v77hoKGq4kWxNNIS');
+        $hashKey = '5294y06JbISpM5x9';
+        $hashIV = 'v77hoKGq4kWxNNIS';
 
         // 重新計算檢查碼
         $params = $request->except('CheckMacValue');
@@ -188,11 +202,21 @@ class PaymentController extends Controller
             if ($paymentResult === '1') {
                 // 付款成功
                 $order->update(['is_completed' => true]);
+                
+                // 將機車狀態從 pending_checkout 改為 rented
+                foreach ($order->orderDetails as $detail) {
+                    if ($detail->motorcycle->status === 'pending_checkout') {
+                        $detail->motorcycle->update(['status' => 'rented']);
+                    }
+                }
+                
                 Log::info('訂單付款成功', ['order_no' => $orderNo]);
             } else {
-                // 付款失敗，恢復機車狀態
+                // 付款失敗，恢復機車狀態為可出租
                 foreach ($order->orderDetails as $detail) {
-                    $detail->motorcycle->update(['status' => 'available']);
+                    if ($detail->motorcycle->status === 'pending_checkout') {
+                        $detail->motorcycle->update(['status' => 'available']);
+                    }
                 }
                 Log::warning('訂單付款失敗', ['order_no' => $orderNo, 'result' => $paymentResult]);
             }
@@ -211,15 +235,26 @@ class PaymentController extends Controller
         $paymentResult = $request->input('RtnCode');
         
         $order = Order::where('order_no', $orderNo)->first();
-
-        if (!$order) {
-            return redirect()->route('orders.index')->with('error', '找不到訂單');
-        }
-
+        
         if ($paymentResult === '1') {
-            return redirect()->route('orders.index')->with('success', '付款成功！訂單編號：' . $orderNo);
+            return view('payment.success', compact('order'));
         } else {
-            return redirect()->route('orders.index')->with('error', '付款失敗，請重新嘗試');
+            return view('payment.failed', compact('order'));
         }
+    }
+
+    /**
+     * 付款成功頁面
+     */
+    public function success(Request $request)
+    {
+        $orderId = $request->input('order_id');
+        $order = null;
+        
+        if ($orderId) {
+            $order = Order::find($orderId);
+        }
+        
+        return view('payment.success', compact('order'));
     }
 }

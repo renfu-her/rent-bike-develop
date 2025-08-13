@@ -28,7 +28,7 @@
                                     <div class="row align-items-center">
                                         <div class="col-md-3">
                                             <h6 class="mb-1">訂單編號</h6>
-                                            <p class="text-muted mb-0">#{{ $order->id }}</p>
+                                            <p class="text-muted mb-0">{{ $order->order_no }}</p>
                                         </div>
                                         <div class="col-md-3">
                                             <h6 class="mb-1">商店</h6>

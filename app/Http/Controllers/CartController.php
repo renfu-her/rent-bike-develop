@@ -7,6 +7,7 @@ use App\Models\CartDetail;
 use App\Models\Motorcycle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -146,5 +147,76 @@ class CartController extends Controller
         $cartDetails = $cart->cartDetails()->with('motorcycle')->get();
         
         return view('cart.checkout', compact('cart', 'cartDetails'));
+    }
+
+    /**
+     * 處理結帳
+     */
+    public function processCheckout(Request $request)
+    {
+        $cart = Cart::getCurrentCart();
+        
+        if ($cart->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', '購物車是空的！');
+        }
+
+        // 檢查用戶是否已登入
+        if (!auth('member')->check()) {
+            return redirect()->route('member.login')->with('error', '請先登入才能結帳！');
+        }
+
+        $cartDetails = $cart->cartDetails()->with('motorcycle')->get();
+        $member = auth('member')->user();
+
+        // 開始資料庫交易
+        DB::beginTransaction();
+
+        try {
+            // 為每個購物車項目創建訂單
+            foreach ($cartDetails as $cartDetail) {
+                $motorcycle = $cartDetail->motorcycle;
+                
+                // 檢查機車是否仍可預約
+                if ($motorcycle->status !== 'available') {
+                    throw new \Exception("機車 {$motorcycle->name} 目前無法預約");
+                }
+
+                // 將機車狀態改為待結帳
+                $motorcycle->update(['status' => 'pending_checkout']);
+
+                // 創建訂單
+                $order = \App\Models\Order::create([
+                    'store_id' => $motorcycle->store_id,
+                    'member_id' => $member->id,
+                    'total_price' => $cartDetail->subtotal,
+                    'rent_date' => $cartDetail->rent_date,
+                    'return_date' => $cartDetail->return_date,
+                    'is_completed' => false,
+                    'order_no' => \App\Models\Order::generateOrderNo(),
+                ]);
+
+                // 創建訂單明細
+                \App\Models\OrderDetail::create([
+                    'order_id' => $order->id,
+                    'motorcycle_id' => $motorcycle->id,
+                    'quantity' => $cartDetail->quantity,
+                    'subtotal' => $cartDetail->subtotal,
+                    'total' => $cartDetail->subtotal,
+                ]);
+            }
+
+            // 清空購物車
+            $cart->clear();
+
+            DB::commit();
+
+            // 直接跳轉到付款成功頁面（模擬付款成功）
+            return redirect()->route('payment.success', ['order_id' => $order->id])
+                ->with('success', '結帳成功！您的訂單已建立。');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', '結帳失敗：' . $e->getMessage());
+        }
     }
 }

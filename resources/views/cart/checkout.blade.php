@@ -19,161 +19,159 @@
                 </h1>
             </div>
 
-            <div class="row">
-                <!-- 訂單摘要 -->
-                <div class="col-lg-8">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="mb-0">訂單摘要</h5>
+            <!-- 訂單摘要 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">訂單摘要</h5>
+                </div>
+                <div class="card-body">
+                    @foreach($cartDetails as $item)
+                        <div class="row align-items-center border-bottom py-3">
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <div class="bg-light rounded p-2" style="width: 50px; height: 50px;">
+                                            <i class="bi bi-bicycle fs-4 text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <h6 class="mb-1">{{ $item->motorcycle->name }}</h6>
+                                        <small class="text-muted">{{ $item->motorcycle->model }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <small class="text-muted">租期</small>
+                                    <div class="fw-bold">{{ $item->rent_date->format('m/d') }} - {{ $item->return_date->format('m/d') }}</div>
+                                    @if($item->license_plate)
+                                        <small class="text-muted">駕照：{{ $item->license_plate }}</small>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <small class="text-muted">單價</small>
+                                    <div class="fw-bold">NT$ {{ number_format($item->unit_price) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-end">
+                                    <small class="text-muted">小計</small>
+                                    <div class="fw-bold text-primary">NT$ {{ number_format($item->subtotal) }}</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            @foreach($cartDetails as $item)
-                                <div class="row align-items-center border-bottom py-3">
-                                    <div class="col-md-3">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0">
-                                                <div class="bg-light rounded p-2" style="width: 50px; height: 50px;">
-                                                    <i class="bi bi-bicycle fs-4 text-primary"></i>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 ms-2">
-                                                <h6 class="mb-1">{{ $item->motorcycle->name }}</h6>
-                                                <small class="text-muted">{{ $item->motorcycle->model }}</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="text-center">
-                                            <small class="text-muted">租期</small>
-                                            <div class="fw-bold">{{ $item->rent_date->format('m/d') }} - {{ $item->return_date->format('m/d') }}</div>
-                                            @if($item->license_plate)
-                                                <small class="text-muted">駕照：{{ $item->license_plate }}</small>
-                                            @endif
-                                        </div>
-                                    </div>
+                    @endforeach
 
-                                    <div class="col-md-2">
-                                        <div class="text-center">
-                                            <small class="text-muted">單價</small>
-                                            <div class="fw-bold">NT$ {{ number_format($item->unit_price) }}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="text-end">
-                                            <small class="text-muted">小計</small>
-                                            <div class="fw-bold text-primary">NT$ {{ number_format($item->subtotal) }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                    <div class="alert alert-info">
-                                        <i class="bi bi-info-circle"></i>
-                                        <strong>重要提醒：</strong>
-                                        <ul class="mb-0 mt-2">
-                                            <li>請確認租車日期和數量無誤</li>
-                                            <li>取車時請攜帶身分證件和駕照</li>
-                                            <li>如有疑問請聯繫客服</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card bg-light">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <span>總計：</span>
-                                                <span class="fw-bold fs-5 text-primary">NT$ {{ number_format($cart->total_amount) }}</span>
-                                            </div>
-                                        </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>重要提醒：</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>請確認租車日期和數量無誤</li>
+                                    <li>取車時請攜帶身分證件和駕照</li>
+                                    <li>如有疑問請聯繫客服</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>總計：</span>
+                                        <span class="fw-bold fs-5 text-primary">NT$ {{ number_format($cart->total_amount) }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 付款資訊 -->
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">付款資訊</h5>
+            <!-- 付款資訊 -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">付款資訊</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ route('payment.process') }}" id="paymentForm">
+                        @csrf
+                        <input type="hidden" name="cart_id" value="{{ $cart->id }}">
+                        
+                        <div class="row">
+                            <!-- 會員資訊 -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">會員資訊</label>
+                                <div class="form-control-plaintext">
+                                    <div><strong>{{ auth('member')->user()->name }}</strong></div>
+                                    <div class="text-muted">{{ auth('member')->user()->email }}</div>
+                                    <div class="text-muted">{{ auth('member')->user()->phone }}</div>
+                                </div>
+                            </div>
+
+                            <!-- 付款方式 -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">付款方式</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card" checked>
+                                    <label class="form-check-label" for="credit_card">
+                                        <i class="bi bi-credit-card"></i> 信用卡付款
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="atm" value="atm">
+                                    <label class="form-check-label" for="atm">
+                                        <i class="bi bi-bank"></i> ATM 轉帳
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <form method="POST" action="{{ route('payment.process') }}" id="paymentForm">
-                                @csrf
-                                <input type="hidden" name="cart_id" value="{{ $cart->id }}">
-                                
-                                <!-- 會員資訊 -->
-                                <div class="mb-3">
-                                    <label class="form-label">會員資訊</label>
-                                    <div class="form-control-plaintext">
-                                        <div><strong>{{ auth('member')->user()->name }}</strong></div>
-                                        <div class="text-muted">{{ auth('member')->user()->email }}</div>
-                                        <div class="text-muted">{{ auth('member')->user()->phone }}</div>
-                                    </div>
-                                </div>
 
-                                <!-- 付款方式 -->
-                                <div class="mb-3">
-                                    <label class="form-label">付款方式</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card" checked>
-                                        <label class="form-check-label" for="credit_card">
-                                            <i class="bi bi-credit-card"></i> 信用卡付款
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="payment_method" id="atm" value="atm">
-                                        <label class="form-check-label" for="atm">
-                                            <i class="bi bi-bank"></i> ATM 轉帳
-                                        </label>
-                                    </div>
+                        <div class="row">
+                            <!-- 發票資訊 -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">發票資訊</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="invoice_type" id="personal" value="personal" checked>
+                                    <label class="form-check-label" for="personal">
+                                        個人發票
+                                    </label>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="invoice_type" id="company" value="company">
+                                    <label class="form-check-label" for="company">
+                                        公司發票
+                                    </label>
+                                </div>
+                            </div>
 
-                                <!-- 發票資訊 -->
-                                <div class="mb-3">
-                                    <label class="form-label">發票資訊</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="invoice_type" id="personal" value="personal" checked>
-                                        <label class="form-check-label" for="personal">
-                                            個人發票
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="invoice_type" id="company" value="company">
-                                        <label class="form-check-label" for="company">
-                                            公司發票
-                                        </label>
-                                    </div>
+                            <!-- 同意條款 -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="agree_terms" required>
+                                    <label class="form-check-label" for="agree_terms">
+                                        我已閱讀並同意 <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">租車條款</a>
+                                    </label>
                                 </div>
-
-                                <!-- 同意條款 -->
-                                <div class="mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="agree_terms" required>
-                                        <label class="form-check-label" for="agree_terms">
-                                            我已閱讀並同意 <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">租車條款</a>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <!-- 結帳按鈕 -->
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary btn-lg">
-                                        <i class="bi bi-lock"></i> 安全結帳 NT$ {{ number_format($cart->total_amount) }}
-                                    </button>
-                                </div>
-
-                                <div class="text-center mt-3">
-                                    <small class="text-muted">
-                                        <i class="bi bi-shield-check"></i> 您的付款資訊將透過綠界金流安全加密處理
-                                    </small>
-                                </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+
+                        <!-- 結帳按鈕 -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-lock"></i> 安全結帳 NT$ {{ number_format($cart->total_amount) }}
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-shield-check"></i> 您的付款資訊將透過綠界金流安全加密處理
+                            </small>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

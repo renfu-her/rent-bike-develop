@@ -40,6 +40,7 @@ class Motorcycle extends Model
             'available' => '可出租',
             'rented' => '已出租',
             'maintenance' => '維修中',
+            'pending_checkout' => '待結帳',
             default => $this->status,
         };
     }
