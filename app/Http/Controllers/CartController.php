@@ -29,7 +29,6 @@ class CartController extends Controller
         $request->validate([
             'rent_date' => 'required|date|after_or_equal:today',
             'return_date' => 'required|date|after:rent_date',
-            'quantity' => 'required|integer|min:1|max:10',
             'license_plate' => 'required|string|max:20',
             'notes' => 'nullable|string|max:500',
         ]);
@@ -56,16 +55,14 @@ class CartController extends Controller
             ->first();
 
         if ($existingItem) {
-            // 更新數量
-            $existingItem->update([
-                'quantity' => $existingItem->quantity + $request->quantity
-            ]);
+            // 如果已存在相同機車和日期，不允許重複添加
+            return back()->with('error', '此機車已在購物車中！');
         } else {
-            // 新增項目
+            // 新增項目，數量固定為 1
             CartDetail::create([
                 'cart_id' => $cart->id,
                 'motorcycle_id' => $motorcycleId,
-                'quantity' => $request->quantity,
+                'quantity' => 1,
                 'rent_date' => $request->rent_date,
                 'return_date' => $request->return_date,
                 'unit_price' => $motorcycle->price,
@@ -83,7 +80,6 @@ class CartController extends Controller
     public function update(Request $request, $cartDetailId)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1|max:10',
             'notes' => 'nullable|string|max:500',
         ]);
 
@@ -96,7 +92,6 @@ class CartController extends Controller
         }
 
         $cartDetail->update([
-            'quantity' => $request->quantity,
             'notes' => $request->notes,
         ]);
 

@@ -44,7 +44,7 @@ class CartDetail extends Model
     public function calculateSubtotal()
     {
         $days = $this->rent_date->diffInDays($this->return_date) + 1;
-        $this->subtotal = $this->unit_price * $days * $this->quantity;
+        $this->subtotal = $this->unit_price * $days; // 數量固定為 1
         return $this->subtotal;
     }
 

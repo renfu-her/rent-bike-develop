@@ -99,6 +99,6 @@ class Cart extends Model
      */
     public function getItemCount()
     {
-        return $this->cartDetails()->sum('quantity');
+        return $this->cartDetails()->count();
     }
 }

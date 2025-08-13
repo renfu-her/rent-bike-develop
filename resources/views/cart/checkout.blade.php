@@ -51,12 +51,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="text-center">
-                                            <small class="text-muted">數量</small>
-                                            <div class="fw-bold">{{ $item->quantity }} 台</div>
-                                        </div>
-                                    </div>
+
                                     <div class="col-md-2">
                                         <div class="text-center">
                                             <small class="text-muted">單價</small>

@@ -90,12 +90,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="text-center">
-                                        <div class="fw-bold">{{ $item->quantity }}</div>
-                                        <small class="text-muted">台</small>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-2">
                                     <div class="text-end">
                                         <div class="fw-bold text-primary">NT$ {{ number_format($item->subtotal) }}</div>

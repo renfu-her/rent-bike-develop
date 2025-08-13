@@ -218,11 +218,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="quantity_{{ $motorcycle->id }}" class="form-label">數量 *</label>
-                                    <input type="number" class="form-control" id="quantity_{{ $motorcycle->id }}" 
-                                           name="quantity" value="1" min="1" max="10" required>
-                                </div>
+
                                 <div class="mb-3">
                                     <label for="license_plate_{{ $motorcycle->id }}" class="form-label">駕照號碼 *</label>
                                     <input type="text" class="form-control" id="license_plate_{{ $motorcycle->id }}" 
