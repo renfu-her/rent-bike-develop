@@ -115,12 +115,10 @@ class OrderDetailResource extends Resource
                     ->relationship('motorcycle', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // 移除編輯操作，只允許查看
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // 移除批量操作
             ]);
     }
 
@@ -135,8 +133,6 @@ class OrderDetailResource extends Resource
     {
         return [
             'index' => Pages\ListOrderDetails::route('/'),
-            'create' => Pages\CreateOrderDetail::route('/create'),
-            'edit' => Pages\EditOrderDetail::route('/{record}/edit'),
         ];
     }
 }

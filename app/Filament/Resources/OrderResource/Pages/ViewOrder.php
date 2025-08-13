@@ -4,16 +4,16 @@ namespace App\Filament\Resources\OrderResource\Pages;
 
 use App\Filament\Resources\OrderResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ViewRecord;
 
-class ListOrders extends ListRecords
+class ViewOrder extends ViewRecord
 {
     protected static string $resource = OrderResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            // 移除新增按鈕，只允許查看
+            // 移除所有操作，只允許查看
         ];
     }
 }

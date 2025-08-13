@@ -13,7 +13,7 @@ class ListOrderDetails extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            // 移除新增按鈕，只允許查看
         ];
     }
 }
