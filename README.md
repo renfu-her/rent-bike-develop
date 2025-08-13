@@ -1,187 +1,231 @@
-# 🏍️ 機車出租網站
+# 機車出租網站 (Motorcycle Rental Website)
 
-一個基於 Laravel 12 和 Filament 3 的完整機車出租管理系統。
+一個基於 Laravel 和 Filament 開發的現代化機車出租管理系統，提供完整的線上租車服務。
 
 ## 🚀 功能特色
 
-### 📊 後台管理 (Filament)
-- **機車配件管理**: 完整的 CRUD 操作，狀態篩選
-- **商店管理**: 商店資訊管理，狀態控制
-- **機車管理**: 機車資訊、配件選擇、狀態管理
-- **會員管理**: 會員資料管理
-- **訂單管理**: 訂單查詢、狀態管理
-- **儀表板**: 今日待租車、待還車、預約車子統計
+### 前台功能
+- **會員系統**：註冊、登入、個人資料管理
+- **機車瀏覽**：查看可用機車、詳細資訊、價格
+- **線上預約**：選擇租期、加入購物車、線上結帳
+- **訂單管理**：查看租車記錄、訂單狀態
+- **商店資訊**：查看各分店位置和聯絡資訊
 
-### 🌐 前台網站 (Blade + Bootstrap 5)
-- **響應式設計**: 使用 Bootstrap 5 和 jQuery
-- **首頁**: 特色介紹、統計數據、行動呼籲
-- **機車列表**: 搜尋、篩選、詳細資訊模態框
-- **商店列表**: 商店資訊展示
-- **聯絡我們**: 聯絡表單和資訊
-- **預約系統**: 完整的預約流程
+### 後台管理 (Filament Admin)
+- **機車管理**：新增、編輯、刪除機車資訊
+- **商店管理**：管理各分店資訊
+- **會員管理**：查看和管理會員資料
+- **訂單管理**：查看所有租車訂單（唯讀模式）
+- **訂單明細**：查看訂單詳細內容
+- **儀表板**：統計圖表、即時數據
 
-## 🛠️ 技術架構
+## 🛠 技術架構
 
-- **後端**: Laravel 12 + Filament 3
-- **前端**: Blade + Bootstrap 5 + jQuery
-- **資料庫**: SQLite (可切換到 MySQL)
-- **圖片處理**: Intervention Image
-- **日期選擇**: Flatpickr
-- **富文本編輯**: TinyMCE
+### 後端技術
+- **Laravel 12** - PHP 框架
+- **Filament 3** - 後台管理面板
+- **MySQL/SQLite** - 資料庫
+- **Laravel Sanctum** - API 認證
+
+### 前端技術
+- **Bootstrap 5** - UI 框架
+- **jQuery 3.7.1** - JavaScript 函式庫
+- **Bootstrap Icons** - 圖示庫
+- **Flatpickr** - 日期選擇器
+- **TinyMCE** - 富文本編輯器
+
+### 第三方整合
+- **綠界金流** - 線上付款系統
+- **Intervention Image** - 圖片處理
 
 ## 📋 系統需求
 
-- PHP 8.2+
+- PHP 8.1 或更高版本
 - Composer
-- Node.js (可選，用於前端資源編譯)
+- Node.js & NPM
+- MySQL 5.7+ 或 SQLite
+- Web 伺服器 (Apache/Nginx)
 
 ## 🚀 安裝步驟
 
-1. **克隆專案**
+### 1. 克隆專案
 ```bash
-git clone <repository-url>
+git clone [repository-url]
 cd rent-bike-new
 ```
 
-2. **安裝依賴**
+### 2. 安裝 PHP 依賴
 ```bash
 composer install
 ```
 
-3. **環境設定**
+### 3. 環境設定
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-4. **資料庫設定**
+### 4. 資料庫設定
 ```bash
-# 使用 SQLite (預設)
-touch database/database.sqlite
-
-# 或修改 .env 使用 MySQL
-# DB_CONNECTION=mysql
-# DB_HOST=127.0.0.1
-# DB_PORT=3306
-# DB_DATABASE=rent_bike_new
-# DB_USERNAME=root
-# DB_PASSWORD=
-```
-
-5. **執行遷移和填充資料**
-```bash
+# 編輯 .env 檔案設定資料庫連線
 php artisan migrate
-php artisan db:seed --class=MotorcycleRentalSeeder
+php artisan db:seed
 ```
 
-6. **創建 Filament 管理員帳號**
+### 5. 安裝 Filament
+```bash
+php artisan filament:install --panels
+php artisan vendor:publish --tag=filament-config
+```
+
+### 6. 建立管理員帳號
 ```bash
 php artisan make:filament-user
 ```
 
-7. **啟動開發服務器**
+### 7. 安裝前端依賴 (可選)
 ```bash
-php artisan serve
+npm install
+npm run dev
 ```
 
-## 🌐 訪問網站
+## 📁 專案結構
 
-- **前台網站**: http://localhost:8000
-- **後台管理**: http://localhost:8000/admin
+```
+rent-bike-new/
+├── app/
+│   ├── Filament/Resources/          # Filament 資源
+│   ├── Http/Controllers/           # 控制器
+│   └── Models/                     # 資料模型
+├── database/
+│   ├── migrations/                 # 資料庫遷移
+│   └── seeders/                    # 資料填充
+├── resources/
+│   └── views/                      # Blade 視圖
+├── routes/
+│   └── web.php                     # 路由定義
+└── public/                         # 公開檔案
+```
 
-### 後台登入資訊
-- 帳號: `admin@admin.com`
-- 密碼: `admin` (或您設定的密碼)
-
-## 📊 資料庫結構
+## 🗄 資料庫結構
 
 ### 主要資料表
-- **motorcycle_accessories**: 機車配件 (型號、數量、狀態)
-- **stores**: 商店 (名稱、電話、地址、狀態)
-- **members**: 會員 (名稱、身份證字號、電話、地址)
-- **motorcycles**: 機車 (商店ID、名稱、型號、配件、車牌、價格)
-- **orders**: 訂單 (商店ID、會員ID、總價、租車日期、成交狀態)
-- **order_details**: 訂單明細 (訂單ID、機車ID、數量、小計、總計)
+- **members** - 會員資料
+- **motorcycles** - 機車資訊
+- **stores** - 商店資訊
+- **orders** - 訂單主檔
+- **order_details** - 訂單明細
+- **carts** - 購物車
+- **cart_details** - 購物車明細
 
-## 🎯 主要功能
+## 🔐 安全功能
 
-### 前台功能
-1. **首頁展示**: 網站介紹、特色說明、統計數據
-2. **機車瀏覽**: 搜尋、篩選、詳細資訊查看
-3. **商店資訊**: 商店列表、詳細資訊
-4. **預約系統**: 完整的預約流程
-5. **聯絡我們**: 聯絡表單
+### 會員註冊安全
+- 密碼強度驗證（至少8字元，包含大小寫字母和數字）
+- 即時密碼強度檢查
+- 密碼確認驗證
+- 服務條款和隱私政策同意
 
-### 後台功能
-1. **資料管理**: 所有資料的 CRUD 操作
-2. **狀態管理**: 機車、配件、商店狀態控制
-3. **訂單管理**: 訂單查詢、狀態更新
-4. **統計儀表板**: 即時統計數據
-5. **用戶管理**: 管理員帳號管理
+### 資料保護
+- CSRF 保護
+- SQL 注入防護
+- XSS 防護
+- 個人資料加密儲存
 
-## 📈 儀表板統計
+## 💳 付款系統
 
-- **今日待租車**: 可出租機車數量
-- **今日待還車**: 已出租機車數量
-- **預約車子**: 未來預約數量
+### 綠界金流整合
+- 信用卡付款
+- ATM 轉帳
+- 安全加密傳輸
+- 付款狀態追蹤
 
-## 🎨 自訂功能
+## 📱 響應式設計
 
-### 新增機車配件
-1. 登入後台
-2. 進入「機車配件管理」
-3. 點擊「新增」
-4. 填寫配件資訊
+- 支援桌面、平板、手機
+- Bootstrap 5 響應式框架
+- 觸控友善介面
 
-### 新增商店
-1. 登入後台
-2. 進入「商店管理」
-3. 點擊「新增」
-4. 填寫商店資訊
+## 🌐 多語言支援
 
-### 新增機車
-1. 登入後台
-2. 進入「機車管理」
-3. 點擊「新增」
-4. 選擇商店、填寫機車資訊、選擇配件
+- 中文繁體介面
+- Filament 中文化
+- 可擴展多語言支援
 
-## 🔧 開發說明
+## 🔧 開發工具
 
-### 新增頁面
-1. 創建控制器: `php artisan make:controller NewController`
-2. 定義路由: 在 `routes/web.php` 中新增
-3. 創建視圖: 在 `resources/views/` 中新增 Blade 檔案
-
-### 新增 Filament 資源
+### 常用指令
 ```bash
-php artisan make:filament-resource NewModel --generate
+# 清除快取
+php artisan optimize:clear
+
+# 重新生成 Filament 資源
+php artisan filament:assets
+
+# 查看路由
+php artisan route:list
+
+# 資料庫重置
+php artisan migrate:fresh --seed
 ```
 
-### 資料庫遷移
-```bash
-php artisan make:migration create_new_table
-php artisan migrate
-```
+### 開發環境
+- Laravel Sail (Docker)
+- Laravel Telescope (除錯工具)
+- Laravel Debugbar
 
-## 📝 注意事項
+## 📊 後台管理功能
 
-1. **檔案權限**: 確保 `storage` 和 `bootstrap/cache` 目錄可寫入
-2. **環境變數**: 根據部署環境調整 `.env` 設定
-3. **資料備份**: 定期備份資料庫
-4. **安全性**: 定期更新依賴套件
+### 儀表板
+- 可用機車統計
+- 已出租機車統計
+- 預約統計
+- 即時數據圖表
 
-## 🤝 貢獻
+### 資源管理
+- **機車管理**：CRUD 操作、圖片上傳、狀態管理
+- **商店管理**：分店資訊、關聯機車
+- **會員管理**：會員資料、租車記錄
+- **訂單管理**：唯讀模式，查看所有訂單
 
-歡迎提交 Issue 和 Pull Request 來改善這個專案。
+## 🚨 重要注意事項
+
+### 訂單管理限制
+- 訂單系統為唯讀模式，不允許新增、編輯、刪除
+- 確保資料完整性和審計追蹤
+- 符合法規要求
+
+### 檔案上傳
+- 圖片自動壓縮和格式轉換
+- 安全的檔案命名
+- 儲存空間管理
+
+## 🤝 貢獻指南
+
+1. Fork 專案
+2. 建立功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 開啟 Pull Request
 
 ## 📄 授權
 
-此專案採用 MIT 授權條款。
+本專案採用 MIT 授權條款 - 詳見 [LICENSE](LICENSE) 檔案
 
 ## 📞 聯絡資訊
 
-如有任何問題，請聯絡開發團隊。
+- 專案維護者：[您的姓名]
+- 電子郵件：[您的郵箱]
+- 專案連結：[GitHub 連結]
+
+## 🙏 致謝
+
+- [Laravel](https://laravel.com/) - 優秀的 PHP 框架
+- [Filament](https://filamentphp.com/) - 強大的後台管理面板
+- [Bootstrap](https://getbootstrap.com/) - 響應式 UI 框架
+- [綠界科技](https://www.ecpay.com.tw/) - 金流服務
 
 ---
 
-**機車出租網站** - 讓您的旅程更加便利！ 🏍️✨
+**版本**: 1.0.0  
+**最後更新**: {{ date('Y年m月d日') }}
