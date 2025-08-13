@@ -135,7 +135,8 @@ php artisan make:filament-user
 
 ## 特別設定
 
-- 這是讓不要透過 CSRF 的保護 
+- 不要透過 CSRF 的保護，在 validateCsrfTokens 裏面的 except
+
 ```
 <?php
 
