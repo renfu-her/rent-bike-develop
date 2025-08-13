@@ -221,4 +221,39 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('paymentForm');
+    const agreeCheckbox = document.getElementById('agree_terms');
+    
+    // 移除原有的 required 屬性，改用自定義驗證
+    agreeCheckbox.removeAttribute('required');
+    
+    // 創建錯誤訊息元素
+    let errorElement = document.createElement('div');
+    errorElement.className = 'alert alert-danger mt-2 d-none';
+    errorElement.innerHTML = '<i class="bi bi-exclamation-triangle"></i> 請勾選同意條款才能繼續';
+    agreeCheckbox.parentNode.appendChild(errorElement);
+    
+    // 表單提交驗證
+    form.addEventListener('submit', function(e) {
+        if (!agreeCheckbox.checked) {
+            e.preventDefault();
+            errorElement.classList.remove('d-none');
+            agreeCheckbox.focus();
+            return false;
+        } else {
+            errorElement.classList.add('d-none');
+        }
+    });
+    
+    // 當用戶勾選時隱藏錯誤訊息
+    agreeCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            errorElement.classList.add('d-none');
+        }
+    });
+});
+</script>
 @endsection
