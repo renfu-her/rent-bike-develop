@@ -17,20 +17,20 @@ class PaymentController extends Controller
     {
         $cartId = $request->input('cart_id');
         $paymentMethod = $request->input('payment_method', 'credit_card');
-        
+
         $cart = Cart::findOrFail($cartId);
         $cartDetails = $cart->cartDetails()->with('motorcycle')->get();
-        
+
         if ($cartDetails->isEmpty()) {
             return redirect()->route('cart.index')->with('error', '購物車是空的！');
         }
 
         // 創建訂單
         $order = $this->createOrder($cart, $cartDetails);
-        
+
         // 準備綠界金流參數
         $paymentData = $this->prepareEcpayData($order, $paymentMethod);
-        
+
         // 返回綠界付款表單
         return view('payment.ecpay_form', $paymentData);
     }
@@ -41,19 +41,19 @@ class PaymentController extends Controller
     private function createOrder($cart, $cartDetails)
     {
         $member = auth('member')->user();
-        
+
         // 開始資料庫交易
         DB::beginTransaction();
-        
+
         try {
             // 檢查機車可用性並更新狀態
             foreach ($cartDetails as $cartDetail) {
                 $motorcycle = $cartDetail->motorcycle;
-                
+
                 if ($motorcycle->status !== 'available') {
                     throw new \Exception("機車 {$motorcycle->name} 目前無法預約");
                 }
-                
+
                 $motorcycle->update(['status' => 'pending_checkout']);
             }
 
@@ -84,7 +84,6 @@ class PaymentController extends Controller
 
             DB::commit();
             return $order;
-
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
@@ -97,9 +96,9 @@ class PaymentController extends Controller
     private function prepareEcpayData($order, $paymentMethod)
     {
         // 綠界測試環境設定
-        $merchantId = '2000132'; // 測試特店編號
-        $hashKey = '5294y06JbISpM5x9'; // 測試 HashKey
-        $hashIV = 'v77hoKGq4kWxNNIS'; // 測試 HashIV
+        $merchantId = '3002607'; // 測試特店編號
+        $hashKey = 'pwFHCqoQZGmho4w6'; // 測試 HashKey
+        $hashIV = 'EkRm7iFT261dpevs'; // 測試 HashIV
         $paymentUrl = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
         // 商品名稱
@@ -127,6 +126,9 @@ class PaymentController extends Controller
 
         // 計算檢查碼
         $params['CheckMacValue'] = $this->generateCheckMacValue($params, $hashKey, $hashIV);
+
+
+        // dd($paymentUrl, $params, $hashKey, $hashIV);
 
         return [
             'paymentUrl' => $paymentUrl,
@@ -195,21 +197,21 @@ class PaymentController extends Controller
         // 更新訂單狀態
         $orderNo = $request->input('MerchantTradeNo');
         $paymentResult = $request->input('RtnCode');
-        
+
         $order = Order::where('order_no', $orderNo)->first();
-        
+
         if ($order) {
             if ($paymentResult === '1') {
                 // 付款成功
                 $order->update(['is_completed' => true]);
-                
+
                 // 將機車狀態從 pending_checkout 改為 rented
                 foreach ($order->orderDetails as $detail) {
                     if ($detail->motorcycle->status === 'pending_checkout') {
                         $detail->motorcycle->update(['status' => 'rented']);
                     }
                 }
-                
+
                 Log::info('訂單付款成功', ['order_no' => $orderNo]);
             } else {
                 // 付款失敗，恢復機車狀態為可出租
@@ -233,9 +235,9 @@ class PaymentController extends Controller
     {
         $orderNo = $request->input('MerchantTradeNo');
         $paymentResult = $request->input('RtnCode');
-        
+
         $order = Order::where('order_no', $orderNo)->first();
-        
+
         if ($paymentResult === '1') {
             return view('payment.success', compact('order'));
         } else {
@@ -250,11 +252,11 @@ class PaymentController extends Controller
     {
         $orderId = $request->input('order_id');
         $order = null;
-        
+
         if ($orderId) {
             $order = Order::find($orderId);
         }
-        
+
         return view('payment.success', compact('order'));
     }
 }

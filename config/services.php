@@ -33,9 +33,9 @@ return [
 
     // 綠界金流設定
     'ecpay' => [
-        'merchant_id' => env('ECPAY_MERCHANT_ID', '2000132'), // 測試環境特店編號
-        'hash_key' => env('ECPAY_HASH_KEY', '5294y06JbISpM5x9'), // 測試環境 HashKey
-        'hash_iv' => env('ECPAY_HASH_IV', 'v77hoKGq4kWxNNIS'), // 測試環境 HashIV
+        'merchant_id' => env('ECPAY_MERCHANT_ID', '3002607'), // 測試環境特店編號
+        'hash_key' => env('ECPAY_HASH_KEY', 'pwFHCqoQZGmho4w6'), // 測試環境 HashKey
+        'hash_iv' => env('ECPAY_HASH_IV', 'EkRm7iFT261dpevs'), // 測試環境 HashIV
         'payment_url' => env('ECPAY_PAYMENT_URL', 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5'), // 測試環境付款網址
         'query_url' => env('ECPAY_QUERY_URL', 'https://payment-stage.ecpay.com.tw/Cashier/QueryTradeInfo/V5'), // 測試環境查詢網址
     ],
