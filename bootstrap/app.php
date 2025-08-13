@@ -11,12 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Use custom CSRF middleware to allow certain URLs to bypass CSRF protection.
-        $middleware->web(remove: [
-            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-        ]);
-        $middleware->web(append: [
-            \App\Http\Middleware\CustomVerifyCsrfToken::class,
+        $middleware->validateCsrfTokens(except: [
+            '/payment/result',
+            '/payment/notify'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
