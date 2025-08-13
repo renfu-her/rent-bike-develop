@@ -99,7 +99,7 @@ class MotorcycleRentalSeeder extends Seeder
                        'accessories' => [1, 2, 3], // 安全帽, 雨衣, GPS導航
                        'license_plate' => 'ABC-123',
                        'price' => 800,
-                       'status' => '可出租'
+                       'status' => 'available'
                    ],
                    [
                        'store_id' => 1,
@@ -108,7 +108,7 @@ class MotorcycleRentalSeeder extends Seeder
                        'accessories' => [1, 2, 4], // 安全帽, 雨衣, 手機架
                        'license_plate' => 'DEF-456',
                        'price' => 750,
-                       'status' => '可出租'
+                       'status' => 'available'
                    ],
                    [
                        'store_id' => 2,
@@ -117,7 +117,7 @@ class MotorcycleRentalSeeder extends Seeder
                        'accessories' => [1, 2, 5], // 安全帽, 雨衣, 後箱
                        'license_plate' => 'GHI-789',
                        'price' => 900,
-                       'status' => '已出租'
+                       'status' => 'rented'
                    ],
                    [
                        'store_id' => 2,
@@ -126,7 +126,7 @@ class MotorcycleRentalSeeder extends Seeder
                        'accessories' => [1, 3, 4], // 安全帽, GPS導航, 手機架
                        'license_plate' => 'JKL-012',
                        'price' => 1000,
-                       'status' => '可出租'
+                       'status' => 'available'
                    ],
                    [
                        'store_id' => 3,
@@ -135,7 +135,7 @@ class MotorcycleRentalSeeder extends Seeder
                        'accessories' => [1, 2, 3, 4], // 安全帽, 雨衣, GPS導航, 手機架
                        'license_plate' => 'MNO-345',
                        'price' => 1200,
-                       'status' => '維修中'
+                       'status' => 'maintenance'
                    ],
                    [
                        'store_id' => 3,
@@ -144,7 +144,7 @@ class MotorcycleRentalSeeder extends Seeder
                        'accessories' => [1, 2, 5], // 安全帽, 雨衣, 後箱
                        'license_plate' => 'PQR-678',
                        'price' => 850,
-                       'status' => '可出租'
+                       'status' => 'available'
                    ],
         ];
 
@@ -155,17 +155,21 @@ class MotorcycleRentalSeeder extends Seeder
         // Create Orders
         $orders = [
             [
+                'order_no' => 'RENT202508130001',
                 'store_id' => 2,
                 'member_id' => 1,
                 'total_price' => 900,
                 'rent_date' => now()->addDays(2),
+                'return_date' => now()->addDays(3),
                 'is_completed' => true
             ],
             [
+                'order_no' => 'RENT202508130002',
                 'store_id' => 1,
                 'member_id' => 2,
                 'total_price' => 800,
                 'rent_date' => now()->addDays(5),
+                'return_date' => now()->addDays(6),
                 'is_completed' => false
             ],
         ];
