@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', '機車出租網站')</title>
 
+    <!-- 這是 favicon.png -->
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
     
     <!-- Bootstrap 5 CSS -->
