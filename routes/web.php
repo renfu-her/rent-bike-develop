@@ -35,15 +35,6 @@ Route::get('/motorcycles', [MotorcycleController::class, 'index'])->name('motorc
 Route::get('/motorcycles/{id}/rent', [MotorcycleController::class, 'rent'])->name('motorcycles.rent');
 Route::post('/motorcycles/{id}/rent', [MotorcycleController::class, 'storeRent'])->name('motorcycles.rent.store')->middleware('auth:member');
 
-// Cart routes
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{motorcycleId}', [CartController::class, 'add'])->name('cart.add');
-Route::put('/cart/update/{cartDetailId}', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/remove/{cartDetailId}', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-Route::post('/cart/process-checkout', [CartController::class, 'processCheckout'])->name('cart.processCheckout')->middleware('auth:member');
-
 // Payment routes
 Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process')->middleware('auth:member');
 Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
@@ -59,14 +50,36 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-// Profile routes
-Route::get('/profile', [MemberProfileController::class, 'show'])->name('profile.show')->middleware('auth:member');
-Route::put('/profile', [MemberProfileController::class, 'update'])->name('profile.update')->middleware('auth:member');
+// Terms and Privacy pages
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
 
-// Orders page (placeholder)
-Route::get('/orders', function () {
-    return view('orders.index');
-})->name('orders.index');
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+
+
+Route::group(['middleware' => 'auth:member'], function () {
+   
+    // Profile routes
+    Route::get('/profile', [MemberProfileController::class, 'show'])->name('profile.show')->middleware('auth:member');
+    Route::put('/profile', [MemberProfileController::class, 'update'])->name('profile.update')->middleware('auth:member');
+
+    // Orders page (placeholder)
+    Route::get('/orders', function () {
+        return view('orders.index');
+    })->name('orders.index');
+
+    // Cart routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{motorcycleId}', [CartController::class, 'add'])->name('cart.add');
+    Route::put('/cart/update/{cartDetailId}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{cartDetailId}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/cart/process-checkout', [CartController::class, 'processCheckout'])->name('cart.processCheckout')->middleware('auth:member');
+});
 
 // Test CSRF exception
 Route::post('/test-csrf', function () {
@@ -77,5 +90,3 @@ Route::post('/test-csrf', function () {
 Route::get('/test-csrf-page', function () {
     return view('test-csrf');
 })->name('test.csrf.page');
-
-

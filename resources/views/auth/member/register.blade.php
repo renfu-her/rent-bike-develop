@@ -131,8 +131,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="terms" required>
                                     <label class="form-check-label" for="terms">
-                                        我同意 <a href="#" target="_blank">服務條款</a> 和 <a href="#"
-                                            target="_blank">隱私政策</a>
+                                        我同意 <a href="{{ route('terms') }}" target="_blank">服務條款</a> 和 <a href="{{ route('privacy') }}" target="_blank">隱私政策</a>
                                     </label>
                                 </div>
                             </div>
