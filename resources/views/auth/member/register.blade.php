@@ -161,123 +161,128 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            const $passwordInput = $('#password');
-            const $confirmPasswordInput = $('#password_confirmation');
-            const $termsCheckbox = $('#terms');
-            const $form = $('form');
+        // 確保 jQuery 已載入
+        if (typeof jQuery === 'undefined') {
+            console.error('jQuery is not loaded!');
+        } else {
+            $(document).ready(function() {
+                const $passwordInput = $('#password');
+                const $confirmPasswordInput = $('#password_confirmation');
+                const $termsCheckbox = $('#terms');
+                const $form = $('form');
 
-            // Password validation elements
-            const $lengthCheck = $('#length-check');
-            const $lowercaseCheck = $('#lowercase-check');
-            const $uppercaseCheck = $('#uppercase-check');
-            const $numberCheck = $('#number-check');
-            const $passwordMatchText = $('#password-match-text');
+                // Password validation elements
+                const $lengthCheck = $('#length-check');
+                const $lowercaseCheck = $('#lowercase-check');
+                const $uppercaseCheck = $('#uppercase-check');
+                const $numberCheck = $('#number-check');
+                const $passwordMatchText = $('#password-match-text');
 
-            // Password validation function
-            function validatePassword(password) {
-                const hasLength = password.length >= 8;
-                const hasLowercase = /[a-z]/.test(password);
-                const hasUppercase = /[A-Z]/.test(password);
-                const hasNumber = /\d/.test(password);
+                // Password validation function
+                function validatePassword(password) {
+                    const hasLength = password.length >= 8;
+                    const hasLowercase = /[a-z]/.test(password);
+                    const hasUppercase = /[A-Z]/.test(password);
+                    const hasNumber = /\d/.test(password);
 
-                // Update visual feedback
-                updateRequirement($lengthCheck, hasLength);
-                updateRequirement($lowercaseCheck, hasLowercase);
-                updateRequirement($uppercaseCheck, hasUppercase);
-                updateRequirement($numberCheck, hasNumber);
+                    // Update visual feedback
+                    updateRequirement($lengthCheck, hasLength);
+                    updateRequirement($lowercaseCheck, hasLowercase);
+                    updateRequirement($uppercaseCheck, hasUppercase);
+                    updateRequirement($numberCheck, hasNumber);
 
-                return hasLength && hasLowercase && hasUppercase && hasNumber;
-            }
-
-            // Update requirement visual feedback
-            function updateRequirement($element, isValid) {
-                const $icon = $element.find('i');
-                if (isValid) {
-                    $element.removeClass('text-danger').addClass('text-success');
-                    $icon.removeClass('bi-x-circle').addClass('bi-check-circle');
-                } else {
-                    $element.removeClass('text-success').addClass('text-danger');
-                    $icon.removeClass('bi-check-circle').addClass('bi-x-circle');
+                    return hasLength && hasLowercase && hasUppercase && hasNumber;
                 }
-            }
 
-            // Password confirmation validation
-            function validatePasswordConfirmation() {
-                const password = $passwordInput.val();
-                const confirmPassword = $confirmPasswordInput.val();
-                const isValid = password === confirmPassword && password !== '';
-
-                if (confirmPassword !== '') {
+                // Update requirement visual feedback
+                function updateRequirement($element, isValid) {
+                    const $icon = $element.find('i');
                     if (isValid) {
-                        $passwordMatchText.removeClass('text-danger').addClass('text-success');
-                        $passwordMatchText.html('<i class="bi bi-check-circle"></i> 密碼匹配');
+                        $element.removeClass('text-danger').addClass('text-success');
+                        $icon.removeClass('bi-x-circle').addClass('bi-check-circle');
+                    } else {
+                        $element.removeClass('text-success').addClass('text-danger');
+                        $icon.removeClass('bi-check-circle').addClass('bi-x-circle');
+                    }
+                }
+
+                // Password confirmation validation
+                function validatePasswordConfirmation() {
+                    const password = $passwordInput.val();
+                    const confirmPassword = $confirmPasswordInput.val();
+                    const isValid = password === confirmPassword && password !== '';
+
+                    if (confirmPassword !== '') {
+                        if (isValid) {
+                            $passwordMatchText.removeClass('text-danger').addClass('text-success');
+                            $passwordMatchText.html('<i class="bi bi-check-circle"></i> 密碼匹配');
+                        } else {
+                            $passwordMatchText.removeClass('text-success').addClass('text-danger');
+                            $passwordMatchText.html('<i class="bi bi-x-circle"></i> 密碼不匹配');
+                        }
                     } else {
                         $passwordMatchText.removeClass('text-success').addClass('text-danger');
                         $passwordMatchText.html('<i class="bi bi-x-circle"></i> 密碼不匹配');
                     }
-                } else {
-                    $passwordMatchText.removeClass('text-success').addClass('text-danger');
-                    $passwordMatchText.html('<i class="bi bi-x-circle"></i> 密碼不匹配');
+
+                    return isValid;
                 }
 
-                return isValid;
-            }
+                // Event listeners
+                $passwordInput.on('input', function() {
+                    validatePassword($(this).val());
+                    if ($confirmPasswordInput.val()) {
+                        validatePasswordConfirmation();
+                    }
+                });
 
-            // Event listeners
-            $passwordInput.on('input', function() {
-                validatePassword($(this).val());
-                if ($confirmPasswordInput.val()) {
-                    validatePasswordConfirmation();
-                }
+                $confirmPasswordInput.on('input', validatePasswordConfirmation);
+
+                // Terms checkbox validation
+                $termsCheckbox.removeAttr('required');
+
+                // Create error message element for terms
+                const $termsErrorElement = $('<div class="alert alert-danger mt-2 d-none">' +
+                    '<i class="bi bi-exclamation-triangle"></i> 請同意服務條款和隱私政策才能繼續</div>');
+                $termsCheckbox.parent().append($termsErrorElement);
+
+                // Form submission validation
+                $form.on('submit', function(e) {
+                    const isPasswordValid = validatePassword($passwordInput.val());
+                    const isPasswordMatch = validatePasswordConfirmation();
+                    const isTermsAccepted = $termsCheckbox.is(':checked');
+
+                    if (!isPasswordValid) {
+                        e.preventDefault();
+                        alert('請確保密碼符合所有要求');
+                        $passwordInput.focus();
+                        return false;
+                    }
+
+                    if (!isPasswordMatch) {
+                        e.preventDefault();
+                        alert('請確認密碼輸入正確');
+                        $confirmPasswordInput.focus();
+                        return false;
+                    }
+
+                    if (!isTermsAccepted) {
+                        e.preventDefault();
+                        $termsErrorElement.removeClass('d-none');
+                        $termsCheckbox.focus();
+                        return false;
+                    } else {
+                        $termsErrorElement.addClass('d-none');
+                    }
+                });
+
+                // Hide terms error when checkbox is checked
+                $termsCheckbox.on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $termsErrorElement.addClass('d-none');
+                    }
+                });
             });
-
-            $confirmPasswordInput.on('input', validatePasswordConfirmation);
-
-            // Terms checkbox validation
-            $termsCheckbox.removeAttr('required');
-
-            // Create error message element for terms
-            const $termsErrorElement = $('<div class="alert alert-danger mt-2 d-none">' +
-                '<i class="bi bi-exclamation-triangle"></i> 請同意服務條款和隱私政策才能繼續</div>');
-            $termsCheckbox.parent().append($termsErrorElement);
-
-            // Form submission validation
-            $form.on('submit', function(e) {
-                const isPasswordValid = validatePassword($passwordInput.val());
-                const isPasswordMatch = validatePasswordConfirmation();
-                const isTermsAccepted = $termsCheckbox.is(':checked');
-
-                if (!isPasswordValid) {
-                    e.preventDefault();
-                    alert('請確保密碼符合所有要求');
-                    $passwordInput.focus();
-                    return false;
-                }
-
-                if (!isPasswordMatch) {
-                    e.preventDefault();
-                    alert('請確認密碼輸入正確');
-                    $confirmPasswordInput.focus();
-                    return false;
-                }
-
-                if (!isTermsAccepted) {
-                    e.preventDefault();
-                    $termsErrorElement.removeClass('d-none');
-                    $termsCheckbox.focus();
-                    return false;
-                } else {
-                    $termsErrorElement.addClass('d-none');
-                }
-            });
-
-            // Hide terms error when checkbox is checked
-            $termsCheckbox.on('change', function() {
-                if ($(this).is(':checked')) {
-                    $termsErrorElement.addClass('d-none');
-                }
-            });
-        });
+        }
     </script>
 @endpush
