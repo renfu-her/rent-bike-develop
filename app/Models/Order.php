@@ -43,13 +43,13 @@ class Order extends Model
 
     /**
      * 生成訂單編號
-     * 格式：REBT-年月日+4碼流水號
+     * 格式：RENT-年月日+4碼流水號
      * 隔日重新從0001開始
      */
     public static function generateOrderNo()
     {
         $today = now()->format('Ymd');
-        $prefix = "REBT-{$today}-";
+        $prefix = "RENT-{$today}-";
         
         // 取得今日最後一個訂單編號
         $lastOrder = self::where('order_no', 'like', $prefix . '%')
