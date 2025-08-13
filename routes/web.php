@@ -47,7 +47,7 @@ Route::post('/cart/process-checkout', [CartController::class, 'processCheckout']
 // Payment routes
 Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process')->middleware('auth:member');
 Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
-Route::get('/payment/result', [PaymentController::class, 'result'])->name('payment.result');
+Route::match(['GET', 'POST'], '/payment/result', [PaymentController::class, 'result'])->name('payment.result');
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 
 // Store routes
@@ -67,5 +67,15 @@ Route::put('/profile', [MemberProfileController::class, 'update'])->name('profil
 Route::get('/orders', function () {
     return view('orders.index');
 })->name('orders.index');
+
+// Test CSRF exception
+Route::post('/test-csrf', function () {
+    return response()->json(['message' => 'CSRF test successful']);
+})->name('test.csrf');
+
+// Test CSRF page
+Route::get('/test-csrf-page', function () {
+    return view('test-csrf');
+})->name('test.csrf.page');
 
 

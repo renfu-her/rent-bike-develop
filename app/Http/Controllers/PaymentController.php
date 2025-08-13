@@ -127,7 +127,7 @@ class PaymentController extends Controller
         // 計算檢查碼
         $params['CheckMacValue'] = $this->generateCheckMacValue($params, $hashKey, $hashIV);
 
-
+        // 調試用：顯示參數
         // dd($paymentUrl, $params, $hashKey, $hashIV);
 
         return [
@@ -138,31 +138,41 @@ class PaymentController extends Controller
 
     /**
      * 生成綠界檢查碼
+     * 參考：https://gist.github.com/liaosankai/7aada599848ad599529fd5fdfa7926e6
      */
-    private function generateCheckMacValue($params, $hashKey, $hashIV)
+    private function generateCheckMacValue(array $params, $hashKey, $hashIV)
     {
-        // 移除 CheckMacValue 參數
+        // 0) 如果資料中有 null，必需轉成空字串
+        $params = array_map('strval', $params);
+
+        // 1) 如果資料中有 CheckMacValue 必需先移除
         unset($params['CheckMacValue']);
 
-        // 參數排序
-        ksort($params);
+        // 2) 將鍵值由 A-Z 排序
+        uksort($params, 'strcasecmp');
 
-        // 組合參數字串
-        $queryString = http_build_query($params);
+        // 3) 將陣列轉為 query 字串
+        $paramsString = urldecode(http_build_query($params));
 
-        // 加入 HashKey 和 HashIV
-        $queryString = 'HashKey=' . $hashKey . '&' . $queryString . '&HashIV=' . $hashIV;
+        // 4) 最前方加入 HashKey，最後方加入 HashIV
+        $paramsString = "HashKey={$hashKey}&{$paramsString}&HashIV={$hashIV}";
 
-        // URL Encode
-        $queryString = urlencode($queryString);
+        // 5) 做 URLEncode
+        $paramsString = urlencode($paramsString);
 
-        // 轉小寫
-        $queryString = strtolower($queryString);
+        // 6) 轉為全小寫
+        $paramsString = strtolower($paramsString);
 
-        // SHA256 加密
-        $checkMacValue = hash('sha256', $queryString);
+        // 7) 轉換特定字元(與 dotNet 相符的字元)
+        $search = ['%2d', '%5f', '%2e', '%21', '%2a', '%28', '%29'];
+        $replace = ['-', '_', '.', '!', '*', '(', ')'];
+        $paramsString = str_replace($search, $replace, $paramsString);
 
-        return strtoupper($checkMacValue);
+        // 8) 進行編碼 (SHA256)
+        $paramsString = hash('sha256', $paramsString);
+
+        // 9) 轉為全大寫後回傳
+        return strtoupper($paramsString);
     }
 
     /**
@@ -174,17 +184,12 @@ class PaymentController extends Controller
 
         // 驗證檢查碼
         $checkMacValue = $request->input('CheckMacValue');
-        $hashKey = '5294y06JbISpM5x9';
-        $hashIV = 'v77hoKGq4kWxNNIS';
+        $hashKey = 'pwFHCqoQZGmho4w6';
+        $hashIV = 'EkRm7iFT261dpevs';
 
         // 重新計算檢查碼
-        $params = $request->except('CheckMacValue');
-        ksort($params);
-        $queryString = http_build_query($params);
-        $queryString = 'HashKey=' . $hashKey . '&' . $queryString . '&HashIV=' . $hashIV;
-        $queryString = urlencode($queryString);
-        $queryString = strtolower($queryString);
-        $calculatedCheckMacValue = strtoupper(hash('sha256', $queryString));
+        $params = (array) $request->except('CheckMacValue');
+        $calculatedCheckMacValue = $this->generateCheckMacValue($params, $hashKey, $hashIV);
 
         if ($checkMacValue !== $calculatedCheckMacValue) {
             Log::error('綠界檢查碼驗證失敗', [
