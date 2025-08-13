@@ -18,6 +18,7 @@ class CartDetail extends Model
         'unit_price',
         'subtotal',
         'notes',
+        'license_plate',
     ];
 
     protected $casts = [

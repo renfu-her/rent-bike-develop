@@ -71,11 +71,19 @@ class MotorcycleController extends Controller
             'notes' => 'nullable|string|max:500',
         ]);
 
+        // 更新會員的駕照號碼
+        $member = auth('member')->user();
+        $member->update(['license_plate' => $request->license_number]);
+
+        // 計算租期天數
+        $days = \Carbon\Carbon::parse($request->rent_date)->diffInDays(\Carbon\Carbon::parse($request->return_date)) + 1;
+        $totalAmount = $motorcycle->price * $days;
+
         // 建立訂單
         $order = Order::create([
             'store_id' => $motorcycle->store_id,
-            'member_id' => auth('member')->id(),
-            'total_price' => $motorcycle->price * (strtotime($request->return_date) - strtotime($request->rent_date)) / (24 * 60 * 60),
+            'member_id' => $member->id,
+            'total_price' => $totalAmount,
             'rent_date' => $request->rent_date,
             'return_date' => $request->return_date,
             'is_completed' => false,
@@ -87,8 +95,8 @@ class MotorcycleController extends Controller
             'order_id' => $order->id,
             'motorcycle_id' => $motorcycle->id,
             'quantity' => 1,
-            'subtotal' => $motorcycle->price * (strtotime($request->return_date) - strtotime($request->rent_date)) / (24 * 60 * 60),
-            'total' => $motorcycle->price * (strtotime($request->return_date) - strtotime($request->rent_date)) / (24 * 60 * 60),
+            'subtotal' => $totalAmount,
+            'total' => $totalAmount,
         ]);
 
         // 更新機車狀態為已出租

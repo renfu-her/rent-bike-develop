@@ -46,6 +46,9 @@
                                         <div class="text-center">
                                             <small class="text-muted">租期</small>
                                             <div class="fw-bold">{{ $item->rent_date->format('m/d') }} - {{ $item->return_date->format('m/d') }}</div>
+                                            @if($item->license_plate)
+                                                <small class="text-muted">駕照：{{ $item->license_plate }}</small>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-2">

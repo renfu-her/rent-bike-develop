@@ -7,6 +7,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\MemberProfileController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,11 @@ Route::put('/cart/update/{cartDetailId}', [CartController::class, 'update'])->na
 Route::delete('/cart/remove/{cartDetailId}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+// Payment routes
+Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process')->middleware('auth:member');
+Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
+Route::get('/payment/result', [PaymentController::class, 'result'])->name('payment.result');
 
 // Store routes
 Route::get('/stores', [StoreController::class, 'index'])->name('stores.index');

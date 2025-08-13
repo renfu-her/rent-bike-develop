@@ -17,6 +17,7 @@ class Member extends Authenticatable
         'address',
         'email',
         'password',
+        'license_plate',
     ];
 
     protected $hidden = [

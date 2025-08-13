@@ -83,6 +83,11 @@
                                     <div class="text-center">
                                         <div class="fw-bold">{{ $item->rent_date->format('m/d') }} - {{ $item->return_date->format('m/d') }}</div>
                                         <small class="text-muted">{{ $item->rent_date->diffInDays($item->return_date) + 1 }} 天</small>
+                                        @if($item->license_plate)
+                                            <div class="mt-1">
+                                                <small class="text-muted">駕照：{{ $item->license_plate }}</small>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-2">

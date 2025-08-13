@@ -224,6 +224,13 @@
                                            name="quantity" value="1" min="1" max="10" required>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="license_plate_{{ $motorcycle->id }}" class="form-label">駕照號碼 *</label>
+                                    <input type="text" class="form-control" id="license_plate_{{ $motorcycle->id }}" 
+                                           name="license_plate" required placeholder="請輸入您的駕照號碼"
+                                           value="{{ auth('member')->check() ? auth('member')->user()->license_plate : '' }}">
+                                    <small class="text-muted">此駕照號碼將保存到您的會員資料中</small>
+                                </div>
+                                <div class="mb-3">
                                     <label for="notes_{{ $motorcycle->id }}" class="form-label">備註</label>
                                     <textarea class="form-control" id="notes_{{ $motorcycle->id }}" 
                                               name="notes" rows="2" placeholder="如有特殊需求請在此說明"></textarea>

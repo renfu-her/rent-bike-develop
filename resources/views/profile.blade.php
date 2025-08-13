@@ -69,6 +69,11 @@
                                         <input type="tel" class="form-control" id="phone" name="phone" value="{{ $member->phone }}" readonly>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="license_plate" class="form-label"><strong>駕照號碼</strong></label>
+                                        <input type="text" class="form-control" id="license_plate" value="{{ $member->license_plate ?? '尚未填寫' }}" readonly disabled>
+                                        <small class="text-muted">駕照號碼會在首次租車時自動填入</small>
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="address" class="form-label"><strong>地址</strong></label>
                                         <textarea class="form-control" id="address" name="address" rows="3" readonly>{{ $member->address }}</textarea>
                                     </div>

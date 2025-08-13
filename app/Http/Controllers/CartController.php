@@ -30,6 +30,7 @@ class CartController extends Controller
             'rent_date' => 'required|date|after_or_equal:today',
             'return_date' => 'required|date|after:rent_date',
             'quantity' => 'required|integer|min:1|max:10',
+            'license_plate' => 'required|string|max:20',
             'notes' => 'nullable|string|max:500',
         ]);
 
@@ -37,6 +38,12 @@ class CartController extends Controller
         
         if ($motorcycle->status !== 'available') {
             return back()->with('error', '此機車目前無法預約');
+        }
+
+        // 更新會員的駕照號碼
+        if (auth('member')->check()) {
+            $member = auth('member')->user();
+            $member->update(['license_plate' => $request->license_plate]);
         }
 
         $cart = Cart::getCurrentCart();
@@ -63,6 +70,7 @@ class CartController extends Controller
                 'return_date' => $request->return_date,
                 'unit_price' => $motorcycle->price,
                 'notes' => $request->notes,
+                'license_plate' => $request->license_plate,
             ]);
         }
 
