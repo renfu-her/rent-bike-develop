@@ -157,7 +157,9 @@
             </div>
         </div>
     </div>
+@endsection
 
+@push('scripts')
     <script>
         $(document).ready(function() {
             const $passwordInput = $('#password');
@@ -278,4 +280,4 @@
             });
         });
     </script>
-@endsection
+@endpush
