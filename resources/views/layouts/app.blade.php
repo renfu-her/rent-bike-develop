@@ -6,7 +6,7 @@
     <title>@yield('title', '機車出租網站')</title>
 
     <!-- 這是 favicon.png -->
-    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('images/backend_favicon.png') }}" type="image/png">
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
