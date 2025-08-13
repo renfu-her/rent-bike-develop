@@ -6,6 +6,7 @@ use App\Http\Controllers\MotorcycleController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\MemberProfileController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,14 @@ Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.lo
 Route::get('/motorcycles', [MotorcycleController::class, 'index'])->name('motorcycles.index');
 Route::get('/motorcycles/{id}/rent', [MotorcycleController::class, 'rent'])->name('motorcycles.rent');
 Route::post('/motorcycles/{id}/rent', [MotorcycleController::class, 'storeRent'])->name('motorcycles.rent.store')->middleware('auth:member');
+
+// Cart routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{motorcycleId}', [CartController::class, 'add'])->name('cart.add');
+Route::put('/cart/update/{cartDetailId}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{cartDetailId}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
 // Store routes
 Route::get('/stores', [StoreController::class, 'index'])->name('stores.index');

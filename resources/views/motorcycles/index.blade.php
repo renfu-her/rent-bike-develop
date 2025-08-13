@@ -116,9 +116,10 @@
                                        <i class="bi bi-eye"></i> 詳細
                                    </button>
                                    @if($motorcycle->status == 'available')
-                                       <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-success btn-sm">
-                                           <i class="bi bi-cart-plus"></i> 我要預約
-                                       </a>
+                                       <button type="button" class="btn btn-success btn-sm" 
+                                               data-bs-toggle="modal" data-bs-target="#addToCartModal{{ $motorcycle->id }}">
+                                           <i class="bi bi-cart-plus"></i> 加入購物車
+                                       </button>
                                    @else
                                        <button class="btn btn-secondary btn-sm" disabled>
                                            <i class="bi bi-x-circle"></i> 無法預約
@@ -180,11 +181,67 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
                             @if($motorcycle->status == 'available')
-                                <a href="{{ route('motorcycles.rent', $motorcycle->id) }}" class="btn btn-success">
-                                    <i class="bi bi-cart-plus"></i> 我要預約
-                                </a>
+                                <button type="button" class="btn btn-success" 
+                                        data-bs-toggle="modal" data-bs-target="#addToCartModal{{ $motorcycle->id }}">
+                                    <i class="bi bi-cart-plus"></i> 加入購物車
+                                </button>
                             @endif
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add to Cart Modal -->
+            <div class="modal fade" id="addToCartModal{{ $motorcycle->id }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">加入購物車 - {{ $motorcycle->name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form method="POST" action="{{ route('cart.add', $motorcycle->id) }}">
+                            @csrf
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="rent_date_{{ $motorcycle->id }}" class="form-label">租車日期 *</label>
+                                            <input type="date" class="form-control" id="rent_date_{{ $motorcycle->id }}" 
+                                                   name="rent_date" required min="{{ date('Y-m-d') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="return_date_{{ $motorcycle->id }}" class="form-label">還車日期 *</label>
+                                            <input type="date" class="form-control" id="return_date_{{ $motorcycle->id }}" 
+                                                   name="return_date" required min="{{ date('Y-m-d') }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="quantity_{{ $motorcycle->id }}" class="form-label">數量 *</label>
+                                    <input type="number" class="form-control" id="quantity_{{ $motorcycle->id }}" 
+                                           name="quantity" value="1" min="1" max="10" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="notes_{{ $motorcycle->id }}" class="form-label">備註</label>
+                                    <textarea class="form-control" id="notes_{{ $motorcycle->id }}" 
+                                              name="notes" rows="2" placeholder="如有特殊需求請在此說明"></textarea>
+                                </div>
+                                <div class="alert alert-info">
+                                    <small>
+                                        <i class="bi bi-info-circle"></i>
+                                        <strong>價格：</strong>NT$ {{ number_format($motorcycle->price) }} / 天
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-cart-plus"></i> 加入購物車
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -41,6 +41,18 @@
                 </ul>
                 
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('cart.index') }}">
+                            <i class="bi bi-cart3"></i> 購物車
+                            @php
+                                $cart = \App\Models\Cart::getCurrentCart();
+                                $itemCount = $cart->getItemCount();
+                            @endphp
+                            @if($itemCount > 0)
+                                <span class="badge bg-danger">{{ $itemCount }}</span>
+                            @endif
+                        </a>
+                    </li>
                     @auth('member')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
