@@ -25,8 +25,8 @@
                             <p class="text-muted mb-3">
                                 <i class="bi bi-telephone"></i> {{ $store->phone }}
                             </p>
-                            <span class="badge bg-{{ $store->status == '啟用' ? 'success' : 'danger' }}">
-                                {{ $store->status == '啟用' ? '營業中' : '停業中' }}
+                            <span class="badge bg-{{ $store->status == 1 ? 'success' : 'danger' }}">
+                                {{ $store->status == 1 ? '營業中' : '停業中' }}
                             </span>
                         </div>
                         <div class="col-md-4 text-md-end">

@@ -91,7 +91,7 @@
         </div>
         
         <div class="col-md-3 text-center mb-3">
-                               <div class="h2 text-success fw-bold">{{ \App\Models\Store::where('status', '啟用')->count() }}</div>
+                               <div class="h2 text-success fw-bold">{{ \App\Models\Store::where('status', 1)->count() }}</div>
             <p class="text-muted">服務據點</p>
         </div>
         

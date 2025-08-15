@@ -123,7 +123,9 @@
                         <!-- Terms and Conditions -->
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <input class="form-check-input" type="checkbox" id="terms" required
+                                       oninvalid="this.setCustomValidity('請勾選同意條款才能繼續')"
+                                       oninput="this.setCustomValidity('')">
                                 <label class="form-check-label" for="terms">
                                     我已閱讀並同意 <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">租車條款</a>
                                 </label>

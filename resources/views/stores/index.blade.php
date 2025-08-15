@@ -30,8 +30,8 @@
                         </div>
                         
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="badge bg-{{ $store->status == '啟用' ? 'success' : 'danger' }}">
-                                {{ $store->status == '啟用' ? '營業中' : '停業中' }}
+                            <span class="badge bg-{{ $store->status == 1 ? 'success' : 'danger' }}">
+                                {{ $store->status == 1 ? '營業中' : '停業中' }}
                             </span>
                             <a href="{{ route('stores.show', $store->id) }}" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-eye"></i> 查看詳情
