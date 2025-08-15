@@ -17,7 +17,7 @@ class Store extends Model
     ];
 
     protected $casts = [
-        'status' => 'string',
+        'status' => 'integer',
     ];
 
     public function motorcycles()
@@ -32,6 +32,6 @@ class Store extends Model
 
     public function getStatusTextAttribute()
     {
-        return $this->status;
+        return $this->status == 1 ? '啟用' : '停用';
     }
 }

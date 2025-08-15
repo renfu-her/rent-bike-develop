@@ -45,10 +45,10 @@ class StoreResource extends Resource
                 Forms\Components\Select::make('status')
                     ->label('狀態')
                     ->options([
-                        '啟用' => '啟用',
-                        '停用' => '停用',
+                        1 => '啟用',
+                        0 => '停用',
                     ])
-                    ->default('啟用')
+                    ->default(1)
                     ->required(),
             ]);
     }
@@ -71,9 +71,10 @@ class StoreResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->label('狀態')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        '啟用' => 'success',
-                        '停用' => 'danger',
+                    ->formatStateUsing(fn (int $state): string => $state == 1 ? '啟用' : '停用')
+                    ->color(fn (int $state): string => match ($state) {
+                        1 => 'success',
+                        0 => 'danger',
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -91,8 +92,8 @@ class StoreResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('狀態篩選')
                     ->options([
-                        '啟用' => '啟用',
-                        '停用' => '停用',
+                        1 => '啟用',
+                        0 => '停用',
                     ]),
             ])
             ->actions([
