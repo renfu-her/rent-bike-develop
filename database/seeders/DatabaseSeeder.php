@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         // 執行機車出租相關的 seeder
         $this->call([
             MotorcycleRentalSeeder::class,
+            // UpdateStoreStatusSeeder::class, // 如果需要更新現有資料，可以取消註解
         ]);
     }
 }
