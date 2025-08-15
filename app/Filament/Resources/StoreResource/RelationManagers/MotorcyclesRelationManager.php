@@ -45,11 +45,12 @@ class MotorcyclesRelationManager extends RelationManager
                 Forms\Components\Select::make('status')
                     ->label('狀態')
                     ->options([
-                        '可出租' => '可出租',
-                        '已出租' => '已出租',
-                        '維修中' => '維修中',
+                        'available' => '可出租',
+                        'rented' => '已出租',
+                        'maintenance' => '維修中',
+                        'pending_checkout' => '待結帳',
                     ])
-                    ->default('可出租')
+                    ->default('available')
                     ->required(),
             ]);
     }
@@ -78,9 +79,17 @@ class MotorcyclesRelationManager extends RelationManager
                     ->label('狀態')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        '可出租' => 'success',
-                        '已出租' => 'warning',
-                        '維修中' => 'danger',
+                        'available' => 'success',
+                        'rented' => 'warning',
+                        'maintenance' => 'danger',
+                        'pending_checkout' => 'info',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'available' => '可出租',
+                        'rented' => '已出租',
+                        'maintenance' => '維修中',
+                        'pending_checkout' => '待結帳',
+                        default => $state,
                     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('建立時間')
@@ -92,9 +101,10 @@ class MotorcyclesRelationManager extends RelationManager
                 Tables\Filters\SelectFilter::make('status')
                     ->label('狀態篩選')
                     ->options([
-                        '可出租' => '可出租',
-                        '已出租' => '已出租',
-                        '維修中' => '維修中',
+                        'available' => '可出租',
+                        'rented' => '已出租',
+                        'maintenance' => '維修中',
+                        'pending_checkout' => '待結帳',
                     ]),
             ])
             ->headerActions([
