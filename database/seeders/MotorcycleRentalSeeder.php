@@ -34,24 +34,24 @@ class MotorcycleRentalSeeder extends Seeder
 
         // Create Stores
         $stores = [
-                               [
-                       'name' => '台北車站店',
-                       'phone' => '02-1234-5678',
-                       'address' => '台北市中正區忠孝西路一段49號',
-                       'status' => '啟用'
-                   ],
-                   [
-                       'name' => '西門町店',
-                       'phone' => '02-2345-6789',
-                       'address' => '台北市萬華區西寧南路50號',
-                       'status' => '啟用'
-                   ],
-                   [
-                       'name' => '信義店',
-                       'phone' => '02-3456-7890',
-                       'address' => '台北市信義區松仁路100號',
-                       'status' => '啟用'
-                   ],
+            [
+                'name' => '台北車站店',
+                'phone' => '02-1234-5678',
+                'address' => '台北市中正區忠孝西路一段49號',
+                'status' => 1
+            ],
+            [
+                'name' => '西門町店',
+                'phone' => '02-2345-6789',
+                'address' => '台北市萬華區西寧南路50號',
+                'status' => 1
+            ],
+            [
+                'name' => '信義店',
+                'phone' => '02-3456-7890',
+                'address' => '台北市信義區松仁路100號',
+                'status' => 1
+            ],
         ];
 
         foreach ($stores as $store) {
